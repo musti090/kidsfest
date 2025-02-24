@@ -9,32 +9,26 @@ use Illuminate\Support\Facades\Storage;
 
 class FileService
 {
-
     public function singleFileUpload($file)
     {
-//        $fileSize = $file->getSize();
-//        $mimeType = $file->getMimeType();
-//        $ext = $file->getClientOriginalExtension();
-
-        $path = "uif/" . date('Y') . '/' . date('m');
+        $path = "uif/" . date('Y') . "/personal";
         $storagePath = 'public/' . $path;
-
-        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-
+        $filename = uniqid() . time() . rand(1, 100) . uniqid() . "." . $file->getClientOriginalExtension();
         $ftpUtil = new UploadUtil();
         $ftpUtil->upload($file, $filename, $storagePath);
+        return "storage/".$path."/".$filename;
+    }
 
-        return 22;
-
-//        $model = File::query()->create([
-//            "storage_path" => $path . '/' . $filename, #public/files/a.png
-//            "path" => $path . '/' . $filename,
-//            "extension" => $ext,
-//            "size" => $fileSize,
-//            "mime_type" => $mimeType
-//        ]);
-//
-//        return $model;
+    public function singleBase64Image($base64String)
+    {
+        $path = "uif/" . date('Y') . "/personal";
+        $storagePath = 'public/' . $path;
+        $decodedImage = base64_decode($base64String);
+        $fileExtension = (explode('/', finfo_buffer(finfo_open(), $decodedImage, FILEINFO_MIME_TYPE))[1]);
+        $filename = uniqid() . time() . rand(1, 100) . uniqid() . "." .$fileExtension;
+        $ftpUtil = new UploadUtil();
+        $ftpUtil->uploadBase64($base64String, $filename, $storagePath);
+        return "storage/".$path."/".$filename;
     }
 
 }

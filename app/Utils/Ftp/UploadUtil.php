@@ -36,4 +36,32 @@ class UploadUtil extends FtpUtil
 
         return true;
     }
+    
+    
+        public function uploadBase64($base64String, $filename, $path): string|bool
+    {
+        try {
+            $conn_id = ftp_connect($this->server);
+
+            $login = ftp_login($conn_id, $this->user, $this->password);
+
+            $finalPath = $this->dir . $path;
+
+            if (!ftp_nlist($conn_id, $finalPath)) {
+                ftp_mkdir($conn_id, $finalPath);
+            }
+
+            ftp_chdir($conn_id, $finalPath);
+            $handle = fopen('data://image/jpeg;base64,' . $base64String, 'r');
+
+            $upload = ftp_fput($conn_id, $filename, $handle, FTP_BINARY);
+
+            ftp_close($conn_id);
+
+            return true;
+        } catch (Exception $e) {
+            return response($e->getMessage(), 500);
+        }
+    }
+
 }
