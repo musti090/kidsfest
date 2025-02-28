@@ -106,9 +106,21 @@ return [
   */
 
   'attributes' => [
+      // ferdi
       'fin_code' => 'FİN kod',
+      'director_fin_code' => 'FİN kod',
+      'parent_fin_code' => 'FİN kod',
       'serial_number' => 'Seriya nömrəsi',
-
+      'parent_serial_number' => 'Seriya nömrəsi',
+      'director_serial_number' => 'Seriya nömrəsi',
+      // kollektiv
+      'collective_name' => 'Kollektivin adı sahəsi',
+      'collective_created_date' => 'Yarandığı il sahəsi',
+      'collective_mn_region_id' => 'Müraciət etdiyi şəhər/rayon',
+      'collective_city_id' => 'Şəhər',
+      'collective_nomination_id' => 'Müraciət etdiyi nominasiya',
+      'awards_name' => 'Təltiflər',
+      'awards_name.*' => 'Təltif',
   ],
 
 ];

@@ -11,7 +11,7 @@ class AllCityController extends Controller
 {
     public function index()
     {
-         Cache::forget('AllCity');
+        // Cache::forget('AllCity');
         $data = Cache::rememberForever('AllCity', function ()  {
             return AllCity::select('id','city_name')->get();
         });

@@ -9,26 +9,29 @@ use Illuminate\Support\Facades\Storage;
 
 class FileService
 {
-    public function singleFileUpload($file)
+    public function singleFileUpload($file,$type = null)
     {
-        $path = "uif/" . date('Y') . "/personal";
+        $type = $type == 1 ? "personal" : "collective";
+        $path = "uif/" . date('Y') . "/".$type;
         $storagePath = 'public/' . $path;
         $filename = uniqid() . time() . rand(1, 100) . uniqid() . "." . $file->getClientOriginalExtension();
         $ftpUtil = new UploadUtil();
         $ftpUtil->upload($file, $filename, $storagePath);
-        return "storage/".$path."/".$filename;
+        return $path."/".$filename;
     }
 
-    public function singleBase64Image($base64String)
+
+    public function singleBase64Image($base64String,$type = null)
     {
-        $path = "uif/" . date('Y') . "/personal";
+        $type = $type == 1 ? "personal" : "collective";
+        $path = "uif/" . date('Y') . "/".$type;
         $storagePath = 'public/' . $path;
         $decodedImage = base64_decode($base64String);
         $fileExtension = (explode('/', finfo_buffer(finfo_open(), $decodedImage, FILEINFO_MIME_TYPE))[1]);
         $filename = uniqid() . time() . rand(1, 100) . uniqid() . "." .$fileExtension;
         $ftpUtil = new UploadUtil();
         $ftpUtil->uploadBase64($base64String, $filename, $storagePath);
-        return "storage/".$path."/".$filename;
+        return $path."/".$filename;
     }
 
 }

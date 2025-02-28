@@ -11,7 +11,7 @@ class MNRegionController extends Controller
 {
     public function index()
     {
-        Cache::forget('MNRegion');
+        //Cache::forget('MNRegion');
         $data = Cache::rememberForever('MNRegion', function ()  {
             return MNRegion::select('id','name')->get();
         });

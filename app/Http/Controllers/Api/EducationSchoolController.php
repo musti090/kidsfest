@@ -17,7 +17,7 @@ class EducationSchoolController extends Controller
      */
     public function index()
     {
-        Cache::forget('EducationSchool');
+       // Cache::forget('EducationSchool');
         $data = Cache::rememberForever('EducationSchool', function () {
             return EducationSchool::query()
                 ->select('id', 'school_type')

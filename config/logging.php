@@ -52,6 +52,19 @@ return [
     */
 
     'channels' => [
+
+        'personal' => [
+            'driver' => 'single', // 'single' ilə bir fayl olaraq yazacaq
+            'path' => storage_path('logs/personal/personal_' . date('Y-m-d') . '.log'), // Yeni qovluq və faylın yeri
+            'level' => env('LOG_LEVEL', 'debug'),
+            ],
+
+        'collective' => [
+            'driver' => 'single', // 'single' ilə bir fayl olaraq yazacaq
+            'path' => storage_path('logs/collective/collective_' . date('Y-m-d') . '.log'), // Yeni qovluq və faylın yeri
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
+
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],

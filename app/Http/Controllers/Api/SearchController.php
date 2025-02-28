@@ -15,19 +15,21 @@ use Illuminate\Support\Facades\Log;
 
 class SearchController extends Controller
 {
-    public function index(Request $request)
+
+
+    public function searchPersonalData(Request $request)
     {
         try {
             if($request->has('type') && $request->type == "personal"){
                 if($request->has('document') && $request->document == "fin_code"){
                     if($request->value != null){
                         $fin_code =  DB::table('personal_user_card_information')->select('UIN')->where('fin_code',strtoupper($request->value));
-                      if($fin_code->exists()){
+                        if($fin_code->exists()){
                             return response(['message' => $fin_code->first()->UIN]);
                         }
                     }
-                    return response(['message' =>'Məlumat tapılmadı!']);
-                 }
+                    return response(['message' =>'Məlumat tapılmadı!'],200);
+                }
                 elseif($request->has('document') && $request->document == "id_code"){
                     if($request->value != null){
                         $id_code =  DB::table('personal_user_card_information')->select('UIN')->where('UIN',$request->value);
@@ -35,35 +37,48 @@ class SearchController extends Controller
                             return response(['message' => $id_code->first()->UIN]);
                         }
                     }
-                    return response(['message' =>'Məlumat tapılmadı!']);
+                    return response(['message' =>'Məlumat tapılmadı!'],200);
                 }
                 else{
-                    return response(['message' =>'Məlumat tapılmadı!']);
+                    return response(['message' =>'Məlumat tapılmadı!'],200);
                 }
 
             }
-          /*  elseif($request->has('type') && $request->type == "collective"){
+            return response(['message' =>'Məlumat tapılmadı!'],200);
+        }
+        catch (\Exception $exception){
+            $exception->getMessage();
+        }
+    }
+
+
+    public function searchCollectiveData(Request $request)
+    {
+        try {
+            if($request->has('type') && $request->type == "collective"){
                 if($request->has('document') && $request->document == "col_fin_code"){
                     if($request->value != null){
-                        $col_fin_code =  CollectiveDirector::query()->where('parent_fin_code',$request->value);
+                        $col_fin_code =  DB::table('collective_directors')->select('UIN')->where('director_fin_code',strtoupper($request->value));
                         if($col_fin_code->exists()){
-                            return response(['message' => $col_fin_code->first()->UIN]);
+                            return response(['message' => $col_fin_code->first()->UIN],200);
                         }
+                        return response(['message' =>'Məlumat tapılmadı!'],200);
                     }
-                    return response(['message' =>'Məlumat tapılmadı!'],404);
+                    return response(['message' =>'Məlumat tapılmadı!'],200);
                 }
                 elseif($request->has('document') && $request->document == "col_id_code"){
-                    $col_id_code =  CollectiveDirector::query()->where('UIN',$request->value);
+                    $col_id_code =  DB::table('collective_directors')->select('UIN')->where('UIN',$request->value);
                     if($col_id_code->exists()){
                         return response(['message' => $col_id_code->first()->UIN]);
                     }
-                    return response(['message' =>'Məlumat tapılmadı!'],404);
+                    return response(['message' =>'Məlumat tapılmadı!'],200);
                 }
-                return response(['message' =>'Səhv sorğu !!!']);
-            }*/
-            else {
-                return response(['message' =>'Məlumat tapılmadı!']);
+                else{
+                    return response(['message' =>'Məlumat tapılmadı!'],200);
+                }
+
             }
+            return response(['message' =>'Məlumat tapılmadı!'],200);
         }
         catch (\Exception $exception){
             $exception->getMessage();
@@ -99,7 +114,7 @@ class SearchController extends Controller
                             return response($user_data,200);
                         }
                     }
-                    return response(['message' =>'Məlumat tapılmadı!']);
+                    return response(['message' =>'Məlumat tapılmadı!'],200);
                 }
                 elseif($request->has('document') && $request->document == "birth_card"){
                     if($request->value != null){
@@ -107,7 +122,7 @@ class SearchController extends Controller
                         if($birth_card->exists()){
                             $data = $birth_card->with('personal_user_form_information', 'personal_user_parent_information', 'personal_user_awards')->firstOrFail();
                          /*   if($data->personal_user_form_information == null || $data->personal_user_parent_information == null){
-                                return response(['message' =>'Məlumat tapılmadı!']);
+                               return response(['message' =>'Məlumat tapılmadı!'],200);
                             }*/
                             if($data->date == null || $data->time == null){
                                 return response(['message' =>'Hörmətli iştirakçı, müraciətinizə görə təşəkkür edirik! Böyük sorğu sayını nəzərə alaraq sistemdə uyğunlaşdırma prosesi aparılır. Sizin vaxt və məkan məlumatlarınız qısa zaman ərzində təqdim olunacaqdır. Məlumatı bir neçə saatdan sonra yenidən yoxlamağınız xahiş olunur.']);
@@ -128,14 +143,14 @@ class SearchController extends Controller
 
                     }
 
-                    return response(['message' =>'Məlumat tapılmadı!']);
+                    return response(['message' =>'Məlumat tapılmadı!'],200);
                 }
                 elseif($request->has('document') && $request->document == "id_code"){
                     $id_code =  PersonalUserCardInformation::query()->where('UIN',$request->value);
                     if($id_code->exists()){
                            $data = $id_code->with('personal_user_form_information', 'personal_user_parent_information', 'personal_user_awards')->firstOrFail();
                        /* if($data->personal_user_form_information == null || $data->personal_user_parent_information == null){
-                            return response(['message' =>'Məlumat tapılmadı!']);
+                          return response(['message' =>'Məlumat tapılmadı!'],200);
                         }*/
                         if($data->date == null || $data->time == null){
                             return response(['message' =>'Hörmətli iştirakçı, müraciətinizə görə təşəkkür edirik! Böyük sorğu sayını nəzərə alaraq sistemdə uyğunlaşdırma prosesi aparılır. Sizin vaxt və məkan məlumatlarınız qısa zaman ərzində təqdim olunacaqdır. Məlumatı bir neçə saatdan sonra yenidən yoxlamağınız xahiş olunur.']);
@@ -156,9 +171,9 @@ class SearchController extends Controller
                         Log::info($data->UIN);
                         return response($user_data,200);
                     }
-                    return response(['message' =>'Məlumat tapılmadı!']);
+                    return response(['message' =>'Məlumat tapılmadı!'],200);
                 }
-                return response(['message' =>'Səhv sorğu !!!']);
+                return response(['message' =>'Məlumat tapılmadı!'],200);
             }
             elseif($request->has('type') && $request->type == "collective"){
                 if($request->has('document') && $request->document == "col_fin_code"){
@@ -183,7 +198,7 @@ class SearchController extends Controller
                             return response($user_data,200);
                         }
                     }
-                    return response(['message' =>'Məlumat tapılmadı!']);
+                    return response(['message' =>'Məlumat tapılmadı!'],200);
                 }
                 elseif($request->has('document') && $request->document == "col_id_code"){
                     $col_id_code =  CollectiveDirector::query()->where('UIN',$request->value);
@@ -206,12 +221,12 @@ class SearchController extends Controller
                         Log::info($data->UIN);
                         return response($user_data,200);
                     }
-                    return response(['message' =>'Məlumat tapılmadı!']);
+                    return response(['message' =>'Məlumat tapılmadı!'],200);
                 }
-                return response(['message' =>'Səhv sorğu !!!']);
+                return response(['message' =>'Məlumat tapılmadı!'],200);
             }
             else {
-                return response(['message' =>'Səhv sorğu !!!']);
+                return response(['message' =>'Məlumat tapılmadı!'],200);
             }
 
         }

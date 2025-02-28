@@ -12,7 +12,7 @@ class TestController extends Controller
     public function test(Request $request)
     {
 
-        return uniqid();
+      //  return uniqid();
         $fin_code = $request->fin_code;
         $serial_number = $request->serial_number;
         if ($request->card_old_or_new != 2) {
