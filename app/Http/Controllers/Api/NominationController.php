@@ -21,7 +21,7 @@ class NominationController extends Controller
 
     public function collectiveNominations()
     {
-       // Cache::forget('collectiveNominations');
+        //Cache::forget('collectiveNominations');
         $data = Cache::rememberForever('collectiveNominations', function () {
             return Nomination::select('id', 'name','message')->where('type', '=', 2)->get();
         });

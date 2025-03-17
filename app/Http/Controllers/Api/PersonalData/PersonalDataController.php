@@ -42,11 +42,12 @@ class PersonalDataController extends Controller
             $data = Http::withHeaders(['X-Bridge-Authorization' => env('ASAN_TOKEN')])
                 ->get(env('ASAN_URL') . '?documentNumber=' . $serial_number . '&fin=' . $fin_code)->json()['data'];
             $endDate = env('END_DATE');
+            $date = date('Y-m-d');
             if (is_null($data)) {
                 return response(['message' => 'FİN kod və ya seriya nömrəsi yanlışdır!'], 422);
             } elseif (empty($data)) {
                 return response(['message' => 'Məlumat tapılmadı! Zəhmət olmasa məlumatları əl ilə daxil edin.', 'code' => 2], 404);
-            } elseif ($data[0]['expiryDate']['date'] < $endDate) {
+            } elseif ($data[0]['expiryDate']['date'] < $date) {
                 return response(['message' => 'Sənədin etibarlılıq müddəti bitmişdir!'], 422);
             }
             $data = $data[0];

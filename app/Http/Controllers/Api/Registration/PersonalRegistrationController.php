@@ -39,11 +39,21 @@ class PersonalRegistrationController extends Controller
 
                             $file = $request->file('photo');
 
-                            // Bütün şəkil formatlarını qəbul etmək üçün `image/*` MIME yoxlaması
-                            if (!str_starts_with($file->getMimeType(), 'image/')) {
-                                $fail("Şəkil formatı düzgün deyil!");
+
+                            // İcazə verilmiş MIME növləri (HTM əlavə olundu)
+                            $allowedMimeTypes = [
+                                'image/jpeg',  // JPG, JPEG, JFIF
+                                'image/png',   // PNG
+                                'image/webp',  // WEBP
+                                'image/bmp'   // BMP
+                            ];
+
+                            if (!in_array($file->getMimeType(), $allowedMimeTypes)) {
+                                $fail("Şəkil yalnız JPG, JPEG, JFIF, PNG, WEBP, BMP  formatında olmalıdır!");
                                 return;
                             }
+
+
 
                             // Fayl ölçüsünü məhdudlaşdır (Məsələn, maksimum 5MB)
                             if ($file->getSize() > 5 * 1024 * 1024) {
@@ -157,6 +167,7 @@ class PersonalRegistrationController extends Controller
 
     public function store(Request $request)
     {
+
         $parent_fin_code =  strtoupper($request->parent_fin_code);
         $fin_code =  strtoupper($request->fin_code);
         $parent_cache_fin_code = Cache::get($parent_fin_code);
@@ -170,6 +181,7 @@ class PersonalRegistrationController extends Controller
         }
 
         try {
+
             $UIN = null;
             DB::transaction(function () use ($request, &$UIN) {
                 // Şəkil yükləməsi
@@ -190,7 +202,7 @@ class PersonalRegistrationController extends Controller
                     'birth_date' => $request->birth_date,
                     'registration_address' => $request->registration_address,
                     'live_address' => $request->live_address,
-                    'gender' => $request->gender,
+                    'gender' => strtoupper($request->gender),
                     'mn_region_id' => $request->mn_region_id,
                     'school_type_id' => $request->school_type_id,
                     'school_id' => $request->school_id,

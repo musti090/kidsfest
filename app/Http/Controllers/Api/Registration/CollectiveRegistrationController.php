@@ -77,9 +77,16 @@ class CollectiveRegistrationController extends Controller
 
                             $file = $request->file('photo');
 
-                            // Bütün şəkil formatlarını qəbul etmək üçün `image/*` MIME yoxlaması
-                            if (!str_starts_with($file->getMimeType(), 'image/')) {
-                                $fail("Şəkil formatı düzgün deyil!");
+                            // İcazə verilmiş MIME növləri (HTM əlavə olundu)
+                            $allowedMimeTypes = [
+                                'image/jpeg',  // JPG, JPEG, JFIF
+                                'image/png',   // PNG
+                                'image/webp',  // WEBP
+                                'image/bmp'   // BMP
+                            ];
+
+                            if (!in_array($file->getMimeType(), $allowedMimeTypes)) {
+                                $fail("Şəkil yalnız JPG, JPEG, JFIF, PNG, WEBP, BMP  formatında olmalıdır!");
                                 return;
                             }
 
@@ -133,19 +140,19 @@ class CollectiveRegistrationController extends Controller
         if ($request->has('nomination_id') && $request->has('children_count')) {
             $count = $request->children_count;
 
-            if ($request->nomination_id == 19 && ($count > 20 || $count < 4)) {
+            if ($request->nomination_id == 20 && ($count > 20 || $count < 4)) {
 
                 return response(['message' => 'Sizin müraciətiniz iştirakçı sayı limitinə uyğun deyil.Milli rəqs (ansambl) nominasiyası üzrə limit 4-20 nəfər arası.Say: '.$count], 422);
-            } elseif ($request->nomination_id == 20 && ($count > 20 || $count < 4)) {
+            } elseif ($request->nomination_id == 21 && ($count > 20 || $count < 4)) {
 
                 return response(['message' => 'Sizin müraciətiniz iştirakçı sayı limitinə uyğun deyil.Müasir rəqs (ansambl) nominasiyası üzrə limit 4-20 nəfər arası.Say: '.$count], 422);
-            } elseif ($request->nomination_id == 21 && ($count > 4 || $count < 2)) {
+            } elseif ($request->nomination_id == 22 && ($count > 4 || $count < 2)) {
 
                 return response(['message' => 'Sizin müraciətiniz iştirakçı sayı limitinə uyğun deyil.Bal rəqsi üzrə limit 2-4 nəfər arası.Say: '.$count], 422);
-            } elseif ($request->nomination_id == 22 && ($count > 5 || $count < 3)) {
+            } elseif ($request->nomination_id == 23 && ($count > 5 || $count < 3)) {
 
                 return response(['message' => 'Sizin müraciətiniz iştirakçı sayı limitinə uyğun deyil.Caz ifaçılığı üzrə limit 3-5 nəfər arası.Say: '.$count], 422);
-            } elseif ($request->nomination_id == 23 && ($count > 20 || $count < 12)) {
+            } elseif ($request->nomination_id == 24 && ($count > 20 || $count < 12)) {
 
                 return response(['message' => 'Sizin müraciətiniz iştirakçı sayı limitinə uyğun deyil.Xor üzrə limit 12-20 nəfər arası.Say: '.$count], 422);
             } else {
@@ -263,7 +270,7 @@ class CollectiveRegistrationController extends Controller
                             'birth_date' => $value['birth_date'],
                             'registration_address' => $value['registration_address'],
                             'live_address' => $value['live_address'],
-                            'gender' => $value['gender'],
+                            'gender' => strtoupper($value['gender']),
                             'mn_region_id' => $value['mn_region_id'],
                             'art_type' => $value['art_type'],
                             'art_education' => $value['art_education'] ?? null,

@@ -29,16 +29,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 $date = date("Y-m-d H:i:s");
-if ($date <= '2025-04-01 00:00:00') {
-    Route::middleware('throttle:10,1')->group(function () {
+if ($date <= '2025-03-31 00:01:00') {
+    Route::middleware('throttle:40,1')->group(function () {
         //Personal data routes
-        // Route::get('testim', [TestController::class, 'test']);
+        Route::get('testim', [TestController::class, 'test']);
         Route::get('get-personal-data', [PersonalDataController::class, 'getPersonalData']);
         Route::get('personal-parent-data', [PersonalDataController::class, 'personalParentData']);
         Route::get('get-collective-data', [CollectiveDataController::class, 'getCollectiveData']);
         Route::get('collective-director-data', [CollectiveDataController::class, 'collectiveDirectorData']);
         // Personal user routes
-        // Route::get('test', [TestController::class, 'test']);
+         Route::get('test', [TestController::class, 'test']);
         Route::post('personal-registration-first-step', [PersonalRegistrationController::class, 'firstStep']);
         Route::post('personal-registration-second-step', [PersonalRegistrationController::class, 'secondStep']);
         Route::post('personal-registration-third-step', [PersonalRegistrationController::class, 'thirdStep']);
@@ -63,7 +63,7 @@ if ($date <= '2025-04-01 00:00:00') {
 Route::get('/download-pdf', function () {
     return response()->file(storage_path('app/public/downloads/1.pdf'));
 });
-Route::middleware('throttle:5,1')->group(function () {
+Route::middleware('throttle:7,1')->group(function () {
     // Searches
     Route::get('check-personal', [SearchController::class, 'searchPersonalData']);
     Route::get('check-collective', [SearchController::class, 'searchCollectiveData']);

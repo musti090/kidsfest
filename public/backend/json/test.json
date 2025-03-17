@@ -1,0 +1,33 @@
+{
+    "app_name": "proxy-culture-staging",
+    "timestamp": "2023-02-08 17:17:58",
+    "transaction": "a5f9a043-0a06-4ba4-a67e-213008dc9e33",
+    "status": 200,
+    "description": "OK",
+    "data": [
+        {
+            "docType": "ID",
+            "documentNumber": "16356134",
+            "expiryDate": {
+                "date": "2025-04-06"
+            },
+            "issuingDate": {
+                "date": "2016-06-01"
+            },
+            "organisation": {
+                "name": "Asan-Sumqayıt1"
+            },
+            "personAz": {
+                "birthDate": {
+                    "date": "1990-04-06"
+                },
+                "name": "MUSTAFA",
+                "patronymic": "NAZİM OĞLU",
+                "pin": "4TELXZQ",
+                "gender": "MALE",
+                "surname": "ƏMİRBƏYOV"
+            }
+        }
+    ],
+    "exception": null
+}

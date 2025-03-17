@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [/*'https://uif.az','https://uif-test.netlify.app'*/ '*'],
+    'allowed_origins' => ['https://uif.az'],
 
     'allowed_origins_patterns' => [],
 

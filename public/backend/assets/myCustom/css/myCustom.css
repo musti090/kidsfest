@@ -1,0 +1,13 @@
+.table-tr-bg {
+    background-color: #4b545c;
+    color: white !important;
+}
+td a {
+    margin:3px auto;
+}
+.role-label-name{
+    text-transform: capitalize;
+}
+.permission-th{
+    width: 60%;
+}

@@ -28,12 +28,12 @@ class EducationSchoolController extends Controller
 
     public function getSchools(Request $request)
     {
-        $data = DB::table('education_school_names')->select(
-            'id',
-            'name'
-        )
-            ->where('school_id', '=', $request->school_type)
-            ->get() ?? null;
+            $data = DB::table('education_school_new_names')->select(
+                'id',
+                'name'
+            )
+                ->where('school_id', '=', $request->school_type)
+                ->get();
 
         return response($data, 200);
     }
