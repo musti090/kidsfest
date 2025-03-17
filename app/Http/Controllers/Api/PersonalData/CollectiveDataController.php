@@ -47,7 +47,7 @@ class CollectiveDataController extends Controller
                 return response(['message' => 'FİN kod və ya seriya nömrəsi yanlışdır!'], 422);
             } elseif (empty($data)) {
                 return response(['message' => 'Məlumat tapılmadı! Zəhmət olmasa məlumatları əl ilə daxil edin.', 'code' => 2], 404);
-            } elseif ($data[0]['expiryDate']['date'] < $date) {
+            } elseif (!empty($data[0]['expiryDate']) && $data[0]['expiryDate']['date'] < $date) {
                 return response(['message' => 'Sənədin etibarlılıq müddəti bitmişdir!'], 422);
             }
             $data = $data[0];
@@ -129,7 +129,7 @@ class CollectiveDataController extends Controller
                 return response(['message' => 'FİN kod və ya seriya nömrəsi yanlışdır!'], 422);
             } elseif (empty($data)) {
                 return response(['message' => 'Məlumat tapılmadı! Zəhmət olmasa məlumatları əl ilə daxil edin.', 'code' => 2], 404);
-            } elseif ($data[0]['expiryDate']['date'] < $date) {
+            } elseif (!empty($data[0]['expiryDate']) && $data[0]['expiryDate']['date'] < $date) {
                 return response(['message' => 'Sənədin etibarlılıq müddəti bitmişdir!'], 422);
             }
             $data = $data[0];

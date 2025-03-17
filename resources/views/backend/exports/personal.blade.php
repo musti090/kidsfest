@@ -17,6 +17,14 @@
         <th style="font-weight: bold;text-align: center">Təhsil müəssisəsinin adı	</th>
         <th style="font-weight: bold;text-align: center">Peşəkar/Həvəskar</th>
         <th style="font-weight: bold;text-align: center">Xüsusi incəsənət təhsili</th>
+        <th style="font-weight: bold;text-align: center">Təltiflər</th>
+        <th style="font-weight: bold;text-align: center">Valideynin FİN-i</th>
+        <th style="font-weight: bold;text-align: center">Valideynin adı</th>
+        <th style="font-weight: bold;text-align: center">Valideynin soyadı</th>
+        <th style="font-weight: bold;text-align: center">Valideynin ata adı</th>
+        <th style="font-weight: bold;text-align: center">I telefon nömrəsi</th>
+        <th style="font-weight: bold;text-align: center">II telefon nömrəsi</th>
+        <th style="font-weight: bold;text-align: center">Email</th>
         <th style="font-weight: bold;text-align: center">Qeydiyyat tarixi</th>
     </tr>
     </thead>
@@ -53,6 +61,23 @@
                 @endif
             </td>
             <td style="text-align: center">{{ $value->art_education ?? null }}</td>
+            <td style="text-align: center">
+                @php
+                    $awards = \Illuminate\Support\Facades\DB::table('personal_awards')->where('personal_user_id',$value->id)->select('awards_name')->get();
+                @endphp
+                @if( count($awards) > 0)
+                    @foreach($awards as $key => $award)
+                        {{ $award->awards_name }} {{ $key >= 1 ? ',' : '' }}
+                    @endforeach
+                @endif
+            </td>
+            <td style="text-align: center">{{ $value->parent_fin_code }}</td>
+            <td style="text-align: center">{{ $value->parent_name }}</td>
+            <td style="text-align: center">{{ $value->parent_surname }}</td>
+            <td style="text-align: center">{{ $value->parent_patronymic }}</td>
+            <td style="text-align: center">{{ "0".$value->first_prefix ." ".$value->first_phone_number }}</td>
+            <td style="text-align: center">{{ "0".$value->second_prefix ." ".$value->second_phone_number }}</td>
+            <td style="text-align: center">{{ $value->email }}</td>
             <td style="text-align: center">{{  \Carbon\Carbon::parse($value->created_at )->format('d.m.Y H:i:s')}}</td>
         </tr>
     @endforeach

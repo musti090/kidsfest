@@ -44,7 +44,8 @@ class CollectiveExport implements FromView,WithColumnWidths
             'L' => 30,
             'M' => 30,
             'N' => 30,
-            'O' => 30
+            'O' => 80,
+            'P' => 30
         ];
     }
 

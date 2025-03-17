@@ -15,6 +15,7 @@
         <th style="font-weight: bold;text-align: center"> I telefon nömrəsi</th>
         <th style="font-weight: bold;text-align: center"> II telefon nömrəsi</th>
         <th style="font-weight: bold;text-align: center"> Email</th>
+        <th style="font-weight: bold;text-align: center"> Təltiflər</th>
         <th style="font-weight: bold;text-align: center"> Qeydiyyat tarixi</th>
 
     </tr>
@@ -36,6 +37,16 @@
             <td style="text-align: center">{{ "0".$value->first_prefix ." ".$value->first_phone_number }}</td>
             <td style="text-align: center">{{ "0".$value->second_prefix ." ".$value->second_phone_number }}</td>
             <td style="text-align: center">{{ $value->email  }}</td>
+            <td style="text-align: center">
+                @php
+                    $awards = \Illuminate\Support\Facades\DB::table('collective_awards')->where('collective_id',$value->id)->select('awards_name')->get();
+                @endphp
+                @if( count($awards) > 0)
+                    @foreach($awards as $key => $award)
+                        {{ $award->awards_name }} {{ $key >= 1 ? ',' : '' }}
+                    @endforeach
+                @endif
+            </td>
             <td style="text-align: center">{{  \Carbon\Carbon::parse($value->created_at )->format('d.m.Y H:i:s')}}</td>
         </tr>
     @endforeach

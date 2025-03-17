@@ -13,7 +13,7 @@ class TestController extends Controller
     public function test(Request $request)
     {
         //  return uniqid();
-/*        $fin_code = $request->fin_code;
+/*      $fin_code = $request->fin_code;
         $serial_number = $request->serial_number;
         if ($request->card_old_or_new != 2) {
             $serial_number = "AA" . $serial_number;
@@ -21,7 +21,7 @@ class TestController extends Controller
         $data = Http::withHeaders(['X-Bridge-Authorization' => env('ASAN_TOKEN')])
             ->get(env('ASAN_URL') . '?documentNumber=' . $serial_number . '&fin=' . $fin_code)->json();
 
-        $data = $data['data'];
+        return $data = $data['data'];
         return    $data = $data[0];
 
         return      $person_info = $data['personAz'];
@@ -30,9 +30,21 @@ class TestController extends Controller
     //  return  $all = DB::table('collective_teenagers')->select('id','gender')->get();
 
 
-        $all = DB::table('personal_users')->select('id','name')->get();
-        foreach ($all as $key => $value) {
-            echo "<div>".$value->id."-". $value->name."</div>";
+      //  $all = DB::table('personal_users')->select('id','name')->get();
+        $all = DB::table('collectives')->select('id','collective_name')->get();
+        foreach ($all as $key1 => $value) {
+            echo "<div>".$value->id."-". $value->collective_name."</div>";
+
+            $teenagers = DB::table('collective_teenagers')->select('id')->where('collective_id',$value->id)->get();
+            if($teenagers->count() > 0){
+                foreach ($teenagers as $key2 => $teenager) {
+                    echo "<div>".$teenager->id."</div>";
+                }
+            }
+            else{
+                echo "Yoxdur!!!";
+            }
+
 
            /* $photo1 = explode(".", $value->photo)[1];
             $photo0 = explode(".", $value->photo)[0];*/
@@ -58,7 +70,7 @@ class TestController extends Controller
         }
         //   $arr = explode(".",$all)[1];
 
-       // exit;
+        exit;
 
 
     }

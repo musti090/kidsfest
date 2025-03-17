@@ -27,9 +27,6 @@ class ExcelExportServices
         if ($request->get("birth_date")) {
             $data->where("personal_users.birth_date", $request->get("birth_date"));
         }
-        if ($request->get("patronymic")) {
-            $data->where('personal_users.patronymic', 'like', '%' . $request->get("patronymic") . '%');
-        }
         if ($request->get("gender")) {
             $data->where("personal_users.gender", $request->get("gender"));
         }
@@ -48,6 +45,9 @@ class ExcelExportServices
         if ($request->get("all_city_id")) {
             $data->where("personal_user_card_information.all_city_id", $request->get("all_city_id"));
         }
+        if ($request->get("test")) {
+            $data->where("personal_users.test", $request->get("test"));
+        }
         /*    if ($request->get("school_type_id")) {
                 $data->where("personal_users.school_type_id", $request->get("school_type_id"));
             }
@@ -60,6 +60,7 @@ class ExcelExportServices
 
         return $data->get();
     }
+
 
     public function getCollectiveData($request)
     {
@@ -95,7 +96,9 @@ class ExcelExportServices
         if ($request->get("collective_city_id")) {
             $data->where("collectives.collective_city_id", $request->get("collective_city_id"));
         }
-
+        if ($request->get("test")) {
+            $data->where("collectives.test", $request->get("test"));
+        }
         if ($request->all() == []) {
             $data->take(0);
         }

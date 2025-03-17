@@ -59,6 +59,9 @@ class CollectiveController extends Controller
             if ($request->get("collective_city_id")) {
                 $data->where("collectives.collective_city_id", $request->get("collective_city_id"));
             }
+            if ($request->get("test")) {
+                $data->where("collectives.test", $request->get("test"));
+            }
             $count = $data->count();
             $data = $data->paginate(25)->appends($request->query());
 

@@ -11,12 +11,12 @@ class PersonalExport implements FromView,WithColumnWidths
 {
 
     protected $data;
-   // protected $parent_data;
+    protected $awards;
 
-    public function __construct($data/*,$parent_data*/)
+    public function __construct($data)
     {
         $this->data = $data;
-      //  $this->parent_data = $parent_data;
+
     }
 
     /**
@@ -26,7 +26,6 @@ class PersonalExport implements FromView,WithColumnWidths
     {
         return view('backend.exports.personal', [
             'data' => $this->data
-           // 'parent_data' => $this->parent_data,
         ]);
     }
 
@@ -41,7 +40,7 @@ class PersonalExport implements FromView,WithColumnWidths
             'F' => 20,
             'G' => 15,
             'H' => 10,
-            'I' => 30,
+            'I' => 50,
             'J' => 30,
             'K' => 100,
             'L' => 100,
@@ -49,7 +48,15 @@ class PersonalExport implements FromView,WithColumnWidths
             'N' => 80,
             'O' => 20,
             'P' => 80,
-            'Q' => 20
+            'Q' => 200,
+            'R' => 20,
+            'S' => 20,
+            'T' => 20,
+            'U' => 20,
+            'V' => 20,
+            'W' => 20,
+            'X' => 50,
+            'Y' => 20
         ];
     }
 

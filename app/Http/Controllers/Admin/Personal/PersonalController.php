@@ -64,6 +64,9 @@ class PersonalController extends Controller
             if ($request->get("all_city_id")) {
                 $data->where("personal_user_card_information.all_city_id", $request->get("all_city_id"));
             }
+            if ($request->get("test")) {
+                $data->where("personal_users.test", $request->get("test"));
+            }
             $count = $data->count();
             $data = $data->paginate(25)->appends($request->query());
             return view('backend.pages.firstStep.all-personal-users', compact('data', 'count', 'nominations', 'cities', 'regions'));
@@ -100,8 +103,7 @@ class PersonalController extends Controller
     {
         try {
             $data = $this->excelExportServices->getPersonalData($request);
-         //   $parent_data = $this->excelExportServices->getPersonalParentData($request);
-            return Excel::download(new PersonalExport($data/*,$parent_data*/), 'Fərdi iştirakçılar.xlsx');
+            return Excel::download(new PersonalExport($data), 'Fərdi iştirakçılar.xlsx');
 
         } catch (\Exception $e) {
 
