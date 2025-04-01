@@ -1,12 +1,16 @@
 @extends('backend.layouts.app')
 @section('title','Kollektiv')
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="{{ route('backend.collective.users.list') }}">Bütün kollektivlər</a></li>
+@endsection
 @section('content')
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="text-right">
-                        <a href="{{ route('backend.collective.export.excel',request()->query()) }}" class="btn btn-secondary">
+                        <a href="{{ route('backend.collective.export.excel',request()->query()) }}"
+                           class="btn btn-secondary">
                             Excel-ə çıxar
                         </a>
                     </div>
@@ -18,15 +22,16 @@
                 <div class="col-sm-12"><h4>Axtarış</h4></div>
             </div>
         </div>
-        <div id="panel"  class="container-fluid pt-3 p-5 bg-white">
-            <form  action="{{ route('backend.collective.users.list') }}">
+        <div id="panel" class="container-fluid pt-3 p-5 bg-white">
+            <form action="{{ route('backend.collective.users.list') }}">
                 <div class="form-row">
                     <div class="col">
                         <input type="text" class="form-control" value="{{ old('UIN', request('UIN')) }}"
                                placeholder="Kollektivin kodu" name="UIN">
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" value="{{ old('director_fin_code', request('director_fin_code')) }}"
+                        <input type="text" class="form-control"
+                               value="{{ old('director_fin_code', request('director_fin_code')) }}"
                                placeholder="Kollektiv rəhbərinin FİN-i" name="director_fin_code">
                     </div>
                     <div class="col">
@@ -42,19 +47,23 @@
 
                 <div class="form-row mt-5">
                     <div class="col">
-                        <input type="text" class="form-control" value="{{ old('collective_name', request('collective_name')) }}"
+                        <input type="text" class="form-control"
+                               value="{{ old('collective_name', request('collective_name')) }}"
                                placeholder="Kollektivin adı" name="collective_name">
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" value="{{ old('director_name', request('director_name')) }}"
+                        <input type="text" class="form-control"
+                               value="{{ old('director_name', request('director_name')) }}"
                                placeholder="Kollektiv rəhbərinin adı" name="director_name">
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" value="{{ old('director_surname', request('director_surname')) }}"
+                        <input type="text" class="form-control"
+                               value="{{ old('director_surname', request('director_surname')) }}"
                                placeholder="Kollektiv rəhbərinin soyadı" name="director_surname">
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" value="{{ old('director_patronymic', request('director_patronymic')) }}"
+                        <input type="text" class="form-control"
+                               value="{{ old('director_patronymic', request('director_patronymic')) }}"
                                placeholder="Kollektiv rəhbərinin  ata adı" name="director_patronymic">
                     </div>
                 </div>
@@ -84,8 +93,19 @@
                         </select>
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" value="{{ old('collective_created_date', request('collective_created_date')) }}"
+                        <input type="text" class="form-control"
+                               value="{{ old('collective_created_date', request('collective_created_date')) }}"
                                placeholder="Kollektivin yarandığı il" name="collective_created_date">
+                    </div>
+                    <div class="col">
+                        <select name="age_category" class="form-control text-center">
+                            <option value="" hidden>Yaş kateqoriyası</option>
+                            <option value="6-9" {{ request('age_category') == '6-9' ? 'selected' : '' }}>6-9</option>
+                            <option value="10-13" {{ request('age_category') == '10-13' ? 'selected' : '' }}>10-13
+                            </option>
+                            <option value="14-17" {{ request('age_category') == '14-17' ? 'selected' : '' }}>14-17
+                            </option>
+                        </select>
                     </div>
                 </div>
                 <div class="row mt-5 text-right">
@@ -96,7 +116,7 @@
                 </div>
             </form>
         </div>
-        <div  class="container-fluid mt-5 pt-3 bg-white">
+        <div class="container-fluid mt-5 pt-3 bg-white">
             <div class="row">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-11 text-primary"><h3>Say : {{$count}}  </h3></div>
@@ -114,6 +134,7 @@
                         <th class="text-center">Kollektiv rəhbərinin ata adı</th>
                         <th class="text-center">Müraciət etdiyi nominasiya</th>
                         <th class="text-center">Müraciət etdiyi şəhər/rayon</th>
+                        <th class="text-center">Yaş kateqoriyası</th>
                         <th class="text-center">Ətraflı</th>
                     </tr>
                     </thead>
@@ -129,6 +150,7 @@
                             <td class="text-center">{{ $value->director_patronymic }}</td>
                             <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('nominations')->select('name')->where('id',$value->collective_nomination_id)->first()->name }}</td>
                             <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('all_cities')->select('city_name')->where('id',$value->collective_city_id)->first()->city_name }}</td>
+                            <td class="text-center">{{ $value->age_category ?? null }}</td>
                             <td>
                                 <a target="_blank" class="btn btn-sm btn-secondary"
                                    href="{{ route('backend.collective.user.detail',$value->id) }}">
@@ -157,29 +179,29 @@
     @if( session()->has('error') )
         <script> toastr.error('{{ session('error') }}')</script>
     @endif
- {{--   <!-- Select2 -->
-    <script src="{{ asset('backend/assets/plugins/select2/js/select2.full.min.js') }}"></script>
+    {{--   <!-- Select2 -->
+       <script src="{{ asset('backend/assets/plugins/select2/js/select2.full.min.js') }}"></script>
+       <script>
+           $(function () {
+               //Initialize Select2 Elements
+               $('.select2bs4').select2({
+                   theme: 'bootstrap4'
+               })
+           })
+       </script>--}}
     <script>
-        $(function () {
-            //Initialize Select2 Elements
-            $('.select2bs4').select2({
-                theme: 'bootstrap4'
-            })
-        })
-    </script>--}}
-    <script>
-        $(document).ready(function(){
-            $("#flip").click(function(){
+        $(document).ready(function () {
+            $("#flip").click(function () {
                 $("#panel").slideToggle();
             });
         });
     </script>
 @endpush
 @push('customCss')
-{{--    <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset('backend/assets/plugins/select2/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/assets/plugins/toastr/toastr.min.css') }}">--}}
+    {{--    <!-- Select2 -->
+        <link rel="stylesheet" href="{{ asset('backend/assets/plugins/select2/css/select2.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('backend/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('backend/assets/plugins/toastr/toastr.min.css') }}">--}}
     <style>
         #panel {
             display: none;
@@ -192,11 +214,13 @@
         #panel, #flip {
             border: solid 1px #c3c3c3;
         }
+
         .setir {
             border: 10px solid #ffffff;
             background-color: rgba(0, 0, 0, .05);
 
         }
+
         .sutun {
             background-color: white;
         }

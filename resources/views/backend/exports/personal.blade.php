@@ -25,6 +25,8 @@
         <th style="font-weight: bold;text-align: center">I telefon nömrəsi</th>
         <th style="font-weight: bold;text-align: center">II telefon nömrəsi</th>
         <th style="font-weight: bold;text-align: center">Email</th>
+        <th style="font-weight: bold;text-align: center">Yaş kateqoriyası</th>
+        <th style="font-weight: bold;text-align: center">Yaş</th>
         <th style="font-weight: bold;text-align: center">Qeydiyyat tarixi</th>
     </tr>
     </thead>
@@ -78,6 +80,8 @@
             <td style="text-align: center">{{ "0".$value->first_prefix ." ".$value->first_phone_number }}</td>
             <td style="text-align: center">{{ "0".$value->second_prefix ." ".$value->second_phone_number }}</td>
             <td style="text-align: center">{{ $value->email }}</td>
+            <td style="text-align: center">{{ $value->age_category  }}</td>
+            <td style="text-align: center">{{ $value->age  }}</td>
             <td style="text-align: center">{{  \Carbon\Carbon::parse($value->created_at )->format('d.m.Y H:i:s')}}</td>
         </tr>
     @endforeach

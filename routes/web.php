@@ -7,6 +7,10 @@ use App\Http\Controllers\Admin\Personal\PersonalController;
 use App\Http\Controllers\Admin\Personal\PersonalSearchController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Test\AgeCategoryController;
+use App\Http\Controllers\Test\CedvelController;
+use App\Http\Controllers\Test\FinTestController;
+use App\Http\Controllers\Test\TestController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +38,8 @@ Route::get('melumat', function () {
     return Hash::make('MuS@R$F92Ly#n64Ht');
     return Hash::make('NfD@z8$w2Ly#n6Jt4');
 });*/
+
+//Route::get('add',[\App\Http\Controllers\Api\Test\TestController::class,'add']);
 Route::name('backend.')->prefix('my-admin')->group(function () {
     Route::middleware('throttle:5,1')->group(function () {
         // Login routes
@@ -66,6 +72,13 @@ Route::name('backend.')->prefix('my-admin')->group(function () {
         // Excel export
         Route::get('personal-export-excel',[PersonalController::class,'exportExcel'])->name('personal.export.excel');
         Route::get('collective-export-excel',[CollectiveController::class,'exportExcel'])->name('collective.export.excel');
+
+        // Test routes
+        Route::get('testim', [TestController::class, 'test']);
+        Route::get('age-category-personal', [AgeCategoryController::class, 'personal']);
+        Route::get('age-category-collective', [AgeCategoryController::class, 'collective']);
+        Route::get('fin-test', [FinTestController::class, 'index']);
+        Route::get('cedvel-test', [CedvelController::class, 'index']);
 
     });
 });

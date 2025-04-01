@@ -1,5 +1,8 @@
 @extends('backend.layouts.app')
 @section('title','İştirakçının bütün məlumatları')
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="{{ route('backend.personal.users.list') }}">Bütün iştirakçılar</a></li>
+@endsection
 @section('content')
     <section class="content">
         @if($errors->any())
@@ -26,7 +29,7 @@
                 <div class="col-sm-12">
                     <h3 class="text-center mt-2 mb-4">İştirakçının məlumatları</h3>
                     <table class="table table-borderless table-sm-responsive">
-                        <tr>
+                        <tr class="setir">
                             <th class="text-left">Şəkil</th>
                             <td class="text-center">
                                {{-- <img id="my-image" style="width: 150px;  height: 185px;object-fit: contain"
@@ -37,19 +40,19 @@
                                                                 <div style="width: 150px;  height: 185px; background-image: url({{ env('FTP_URL').'/storage/'. $data->photo }})"></div></td>
                             --}}
                         </tr>
-                        <tr>
+                        <tr class="setir">
                             <th class="text-left">İştirakçı kodu</th>
                             <td class="text-center"><b>{{ $data->UIN }}</b></td>
                         </tr>
-                        <tr>
+                        <tr class="setir">
                             <th class="text-left">FİN</th>
                             <td class="text-center"><b>{{ $data->fin_code }}</b></td>
                         </tr>
-                        <tr>
+                        <tr  class="setir">
                             <th class="text-left">Müraciət etdiyi nominasiya</th>
                             <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('nominations')->select('name')->where('id',$data->nomination_id)->first()->name }}</td>
                         </tr>
-                        <tr>
+                        <tr class="setir">
                             <th class="text-left">Seçilən nominasiya üzrə xüsusi incəsənət təhsili</th>
                             <td class="text-center">
                                 @if( $data->art_type == 1 && $data->art_education != null)
@@ -61,51 +64,56 @@
                                 @endif
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="setir">
                             <th class="text-left">Ad</th>
                             <td class="text-center">{{ $data->name }}</td>
                         </tr>
-                        <tr>
+                        <tr class="setir">
                             <th class="text-left">Soyad</th>
                             <td class="text-center">{{ $data->surname }}</td>
                         </tr>
-                        <tr>
+                        <tr class="setir">
                             <th class="text-left">Ata adı</th>
                             <td class="text-center">{{ $data->patronymic }}</td>
                         </tr>
-                        <tr>
+                        <tr class="setir">
                             <th class="text-left">Doğum tarixi</th>
                             <td class="text-center">{{  \Carbon\Carbon::parse($data->birth_date )->format('d.m.Y')}}</td>
                         </tr>
-                        <tr>
+                        <tr class="setir">
+                            <th class="text-left">Yaş kateqoriyası</th>
+                            <td class="text-center">{{ $data->age_category ?? null }}</td>
+                        </tr>
+
+                        <tr class="setir">
                             <th class="text-left">Cinsi</th>
                             <td class="text-center">{{  $data->gender == 'MALE' ? 'Kişi' : 'Qadın' }}</td>
                         </tr>
-                        <tr>
+                        <tr class="setir">
                             <th class="text-left">Qeydiyyat ünvanı</th>
                             <td class="text-center">{{ $data->registration_address }}</td>
                         </tr>
-                        <tr>
+                        <tr class="setir">
                             <th class="text-left">Faktiki yaşayış ünvanı
                             </th>
                             <td class="text-center">{{ $data->live_address }}</td>
                         </tr>
-                        <tr>
+                        <tr class="setir">
                             <th class="text-left">Yaşadığı şəhər/rayon</th>
                             <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('m_n_regions')->select('name')->where('id',$data->mn_region_id)->first()->name }}</td>
 
                         </tr>
-                        <tr>
+                        <tr class="setir">
                             <th class="text-left">Müraciət etdiyi şəhər/rayon</th>
                             <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('all_cities')->select('city_name')->where('id',$data->all_city_id)->first()->city_name }}</td>
 
                         </tr>
-                        <tr>
+                            <tr class="setir">
                             <th class="text-left">Təhsil  müəssisəsinin növü</th>
-                            <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('education_schools')->select('school_type')->where('id',$data->school_type_id)->first()->school_type }}</td>
+                            <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('education_schools')->select('school_type')->where('id',$data->school_type_id)->first()->school_type ?? null }}</td>
 
                         </tr>
-                        <tr>
+                            <tr class="setir">
                             <th class="text-left">Təhsil  müəssisəsin adı</th>
                             <td class="text-center">
                               @if($data->created_at < '2025-03-15 01:28:00')
@@ -116,7 +124,7 @@
                             </td>
 
                         </tr>
-                        <tr>
+                            <tr class="setir">
                             <th class="text-left">Təltiflər</th>
                             <td class="text-center">
                                 @if( count($awards) > 0)
@@ -129,7 +137,7 @@
                             </td>
 
                         </tr>
-                        <tr>
+                            <tr class="setir">
                             <th class="text-left">Qeydiyyat tarixi</th>
                             <td class="text-center">{{  \Carbon\Carbon::parse($data->created_at )->format('d.m.Y H:i:s')}}</td>
 
@@ -139,31 +147,31 @@
                 <div class="col-sm-12 page-break mb-5">
                     <h3 class="text-center mt-4 mb-4">Valideyn/Qanuni nümayəndə məlumatları</h3>
                     <table class="table table-borderless table-sm-responsive">
-                        <tr>
+                            <tr class="setir">
                             <th class="text-left">FİN</th>
                             <td class="text-center"><b>{{ $data->parent_fin_code }}</b></td>
                         </tr>
-                        <tr>
+                            <tr class="setir">
                             <th class="text-left">Ad</th>
                             <td class="text-center">{{ $data->parent_name }}</td>
                         </tr>
-                        <tr>
+                            <tr class="setir">
                             <th class="text-left">Soyad</th>
                             <td class="text-center">{{ $data->parent_surname }}</td>
                         </tr>
-                        <tr>
+                            <tr class="setir">
                             <th class="text-left">Ata adı</th>
                             <td class="text-center">{{ $data->parent_patronymic }}</td>
                         </tr>
-                        <tr>
+                            <tr class="setir">
                             <th class="text-left">Birinci telefon nömrəsi</th>
                             <td class="text-center">{{ "0".$data->first_prefix ." ".$data->first_phone_number }}</td>
                         </tr>
-                        <tr>
+                            <tr class="setir">
                             <th class="text-left">İkinci telefon nömrəsi</th>
                             <td class="text-center">{{ "0".$data->second_prefix ." ".$data->second_phone_number }}</td>
                         </tr>
-                        <tr>
+                            <tr class="setir">
                             <th class="text-left">Email</th>
                             <td class="text-center">{{ $data->email}}</td>
                         </tr>
@@ -245,6 +253,11 @@
             .no-print {
                 display: none; /* Çap zamanı gizlənsin */
             }
+        }
+        .setir {
+            border: 10px solid #ffffff;
+            background-color: rgba(0, 0, 0, .05);
+
         }
     </style>
 @endpush

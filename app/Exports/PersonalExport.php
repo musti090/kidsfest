@@ -56,7 +56,9 @@ class PersonalExport implements FromView,WithColumnWidths
             'V' => 20,
             'W' => 20,
             'X' => 50,
-            'Y' => 20
+            'Y' => 15,
+            'Z' => 10,
+            'AA' => 20
         ];
     }
 

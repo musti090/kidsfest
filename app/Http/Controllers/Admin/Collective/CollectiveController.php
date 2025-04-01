@@ -20,6 +20,7 @@ class CollectiveController extends Controller
     {
         $this->excelExportServices = $excelExportServices;
     }
+
     public function index(Request $request)
     {
         try {
@@ -27,8 +28,9 @@ class CollectiveController extends Controller
             $cities = Cache::get('AllCity');
             $regions = Cache::get('MNRegion');
 
-            $data = DB::table('collectives')
-                ->leftJoin('collective_directors', 'collective_directors.collective_id', '=', 'collectives.id');
+            $data = DB::table('collective_directors')
+                ->leftJoin('collectives', 'collectives.id', '=', 'collective_directors.collective_id');
+
             if ($request->get("UIN")) {
                 $data->where("collective_directors.UIN", $request->get("UIN"));
             }
@@ -42,13 +44,13 @@ class CollectiveController extends Controller
                 $data->where("collective_directors.director_surname", $request->get("director_surname"));
             }
             if ($request->get("director_patronymic")) {
-                $data->where('collective_directors.director_patronymic', 'like', '%' .  $request->get("director_patronymic") . '%');
+                $data->where('collective_directors.director_patronymic', 'like', '%' . $request->get("director_patronymic") . '%');
             }
             if ($request->get("collective_created_date")) {
                 $data->where("collectives.collective_created_date", $request->get("collective_created_date"));
             }
             if ($request->get("collective_name")) {
-                $data->where('collectives.collective_name', 'like', '%' .  $request->get("collective_name") . '%');
+                $data->where('collectives.collective_name', 'like', '%' . $request->get("collective_name") . '%');
             }
             if ($request->get("collective_nomination_id")) {
                 $data->where("collectives.collective_nomination_id", $request->get("collective_nomination_id"));
@@ -59,13 +61,16 @@ class CollectiveController extends Controller
             if ($request->get("collective_city_id")) {
                 $data->where("collectives.collective_city_id", $request->get("collective_city_id"));
             }
-            if ($request->get("test")) {
-                $data->where("collectives.test", $request->get("test"));
+            if ($request->get("age_category")) {
+                $data->where("collectives.age_category", $request->get("age_category"));
             }
+            /*        if ($request->get("test")) {
+                        $data->where("collectives.test", $request->get("test"));
+                    }*/
             $count = $data->count();
             $data = $data->paginate(25)->appends($request->query());
 
-            return view('backend.pages.firstStep.all-collective-users', compact('data','nominations','cities','regions','count'));
+            return view('backend.pages.firstStep.all-collective-users', compact('data', 'nominations', 'cities', 'regions', 'count'));
 
         } catch (\Exception $e) {
 
@@ -89,22 +94,22 @@ class CollectiveController extends Controller
     public function detail($id)
     {
 
-/*
+        /*
 
-        $collective = Collective::all();
+                $collective = Collective::all();
 
-        foreach ($collective as $c) {
-            echo "<b>".$c->id."</b><br>";
+                foreach ($collective as $c) {
+                    echo "<b>".$c->id."</b><br>";
 
-            $teenagers = DB::table('collective_teenagers')->where('collective_id',$c->id)->get();
-            foreach ($teenagers as $t) {
-                echo $t->id."<br>";
-            }
-           echo "<hr>";
-        }
+                    $teenagers = DB::table('collective_teenagers')->where('collective_id',$c->id)->get();
+                    foreach ($teenagers as $t) {
+                        echo $t->id."<br>";
+                    }
+                   echo "<hr>";
+                }
 
 
-        exit;*/
+                exit;*/
 
         try {
             $collective = DB::table('collectives')

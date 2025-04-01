@@ -1,31 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Api\Test;
+namespace App\Http\Controllers\Test;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 
 class TestController extends Controller
 {
     public function test(Request $request)
     {
-        //  return uniqid();
-/*      $fin_code = $request->fin_code;
-        $serial_number = $request->serial_number;
-        if ($request->card_old_or_new != 2) {
-            $serial_number = "AA" . $serial_number;
-        }
-        $data = Http::withHeaders(['X-Bridge-Authorization' => env('ASAN_TOKEN')])
-            ->get(env('ASAN_URL') . '?documentNumber=' . $serial_number . '&fin=' . $fin_code)->json();
 
-        return $data = $data['data'];
-        return    $data = $data[0];
-
-        return      $person_info = $data['personAz'];
-   return     $person_info['images'][0]['imageStream'];*/
 
     //  return  $all = DB::table('collective_teenagers')->select('id','gender')->get();
 
@@ -73,5 +59,19 @@ class TestController extends Controller
         exit;
 
 
+    }
+
+
+    public function add()
+    {
+        $eduschools =  DB::table('education_school_new_names')->get();
+        $nax =  DB::table('nax')->get();
+
+        foreach ($nax as $n) {
+            DB::table('education_school_new_names')->insert([
+                'name' => $n->name,
+                'school_id' => $n->school_id
+            ]);
+        }
     }
 }

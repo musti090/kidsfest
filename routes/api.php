@@ -9,12 +9,7 @@ use App\Http\Controllers\Api\PersonalData\PersonalDataController;
 use App\Http\Controllers\Api\Registration\CollectiveRegistrationController;
 use App\Http\Controllers\Api\Registration\PersonalRegistrationController;
 use App\Http\Controllers\Api\SearchController;
-use App\Http\Controllers\Api\FinalResultsController;
-use App\Http\Controllers\Api\SecondStepSearchController;
-use App\Http\Controllers\Api\SpecialArtSchoolController;
-use App\Http\Controllers\Api\Test\TestController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Test\TestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,28 +23,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$date = date("Y-m-d H:i:s");
-if ($date <= '2025-03-31 00:01:00') {
+
+ $date = date("Y-m-d H:i:s");
+if ($date <= '2025-04-01 00:00:00') {
+
     Route::middleware('throttle:40,1')->group(function () {
-        //Personal data routes
-        Route::get('testim', [TestController::class, 'test']);
-        Route::get('get-personal-data', [PersonalDataController::class, 'getPersonalData']);
-        Route::get('personal-parent-data', [PersonalDataController::class, 'personalParentData']);
-        Route::get('get-collective-data', [CollectiveDataController::class, 'getCollectiveData']);
-        Route::get('collective-director-data', [CollectiveDataController::class, 'collectiveDirectorData']);
-        // Personal user routes
-         Route::get('test', [TestController::class, 'test']);
-        Route::post('personal-registration-first-step', [PersonalRegistrationController::class, 'firstStep']);
-        Route::post('personal-registration-second-step', [PersonalRegistrationController::class, 'secondStep']);
-        Route::post('personal-registration-third-step', [PersonalRegistrationController::class, 'thirdStep']);
-        Route::post('personal-registration', [PersonalRegistrationController::class, 'store']);
-        // Collective user routes
-        Route::post('collective-registration-first-step', [CollectiveRegistrationController::class, 'firstStep']);
-        Route::post('collective-registration-second-step', [CollectiveRegistrationController::class, 'secondStep']);
-        Route::post('collective-registration-check', [CollectiveRegistrationController::class, 'check']);
-        Route::post('collective-registration-third-step', [CollectiveRegistrationController::class, 'thirdStep']);
-        Route::post('collective-registration', [CollectiveRegistrationController::class, 'store']);
-    });
+    //Personal data routes
+    Route::get('get-personal-data', [PersonalDataController::class, 'getPersonalData']);
+    Route::get('personal-parent-data', [PersonalDataController::class, 'personalParentData']);
+    Route::get('get-collective-data', [CollectiveDataController::class, 'getCollectiveData']);
+    Route::get('collective-director-data', [CollectiveDataController::class, 'collectiveDirectorData']);
+    // Personal user routes
+    Route::post('personal-registration-first-step', [PersonalRegistrationController::class, 'firstStep']);
+    Route::post('personal-registration-second-step', [PersonalRegistrationController::class, 'secondStep']);
+    Route::post('personal-registration-third-step', [PersonalRegistrationController::class, 'thirdStep']);
+    Route::post('personal-registration', [PersonalRegistrationController::class, 'store']);
+    // Collective user routes
+    Route::post('collective-registration-first-step', [CollectiveRegistrationController::class, 'firstStep']);
+    Route::post('collective-registration-second-step', [CollectiveRegistrationController::class, 'secondStep']);
+    Route::post('collective-registration-check', [CollectiveRegistrationController::class, 'check']);
+    Route::post('collective-registration-third-step', [CollectiveRegistrationController::class, 'thirdStep']);
+    Route::post('collective-registration', [CollectiveRegistrationController::class, 'store']);
+});
     // Select lists
     Route::get('education-schools-types', [EducationSchoolController::class, 'index']);
     Route::get('education-schools', [EducationSchoolController::class, 'getSchools']);
@@ -58,16 +53,16 @@ if ($date <= '2025-03-31 00:01:00') {
     Route::get('personal-nominations', [NominationController::class, 'personalNominations']);
     Route::get('collective-nominations', [NominationController::class, 'collectiveNominations']);
 
-}
-// Pdf dowload route
-Route::get('/download-pdf', function () {
-    return response()->file(storage_path('app/public/downloads/1.pdf'));
-});
-Route::middleware('throttle:7,1')->group(function () {
-    // Searches
-    Route::get('check-personal', [SearchController::class, 'searchPersonalData']);
-    Route::get('check-collective', [SearchController::class, 'searchCollectiveData']);
-});
+ }
+    // Pdf dowload route
+    Route::get('/download-pdf', function () {
+        return response()->file(storage_path('app/public/downloads/1.pdf'));
+    });
+    Route::middleware('throttle:7,1')->group(function () {
+        // Searches
+        Route::get('check-personal', [SearchController::class, 'searchPersonalData']);
+        Route::get('check-collective', [SearchController::class, 'searchCollectiveData']);
+    });
 
 /*   Route::get('time-place', [SearchController::class, 'timePlace']);
    Route::get('final-results', [FinalResultsController::class, 'index']);

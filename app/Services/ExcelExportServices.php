@@ -45,9 +45,16 @@ class ExcelExportServices
         if ($request->get("all_city_id")) {
             $data->where("personal_user_card_information.all_city_id", $request->get("all_city_id"));
         }
-        if ($request->get("test")) {
-            $data->where("personal_users.test", $request->get("test"));
+        if ($request->get("age_category")) {
+            $data->where("personal_user_card_information.age_category", $request->get("age_category"));
         }
+        if ($request->get("age")) {
+            $data->where("personal_user_card_information.age", $request->get("age"));
+        }
+
+       /* if ($request->get("test")) {
+            $data->where("personal_users.test", $request->get("test"));
+        }*/
         /*    if ($request->get("school_type_id")) {
                 $data->where("personal_users.school_type_id", $request->get("school_type_id"));
             }
@@ -96,9 +103,12 @@ class ExcelExportServices
         if ($request->get("collective_city_id")) {
             $data->where("collectives.collective_city_id", $request->get("collective_city_id"));
         }
-        if ($request->get("test")) {
-            $data->where("collectives.test", $request->get("test"));
+        if ($request->get("age_category")) {
+            $data->where("collectives.age_category", $request->get("age_category"));
         }
+      /*  if ($request->get("test")) {
+            $data->where("collectives.test", $request->get("test"));
+        }*/
         if ($request->all() == []) {
             $data->take(0);
         }

@@ -16,6 +16,7 @@
         <th style="font-weight: bold;text-align: center"> II telefon nömrəsi</th>
         <th style="font-weight: bold;text-align: center"> Email</th>
         <th style="font-weight: bold;text-align: center"> Təltiflər</th>
+        <th style="font-weight: bold;text-align: center"> Yaş kategoriyası</th>
         <th style="font-weight: bold;text-align: center"> Qeydiyyat tarixi</th>
 
     </tr>
@@ -47,6 +48,7 @@
                     @endforeach
                 @endif
             </td>
+            <td style="text-align: center">{{ $value->age_category ?? null }}</td>
             <td style="text-align: center">{{  \Carbon\Carbon::parse($value->created_at )->format('d.m.Y H:i:s')}}</td>
         </tr>
     @endforeach

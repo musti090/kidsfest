@@ -1,5 +1,8 @@
 @extends('backend.layouts.app')
 @section('title','Fərdi iştirakçılar')
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="{{ route('backend.personal.users.list') }}">Bütün iştirakçılar</a></li>
+@endsection
 @section('content')
     <section class="content">
         <div class="container-fluid">
@@ -67,6 +70,22 @@
                             <option value="FEMALE" {{ request('gender') == 'FEMALE' ? 'selected' : '' }}>Qadın</option>
                         </select>
                     </div>
+                    <div class="col">
+                        <select  name="age_category" class="form-control text-center">
+                            <option value="" hidden>Yaş kateqoriyası</option>
+                            <option value="6-9" {{ request('age_category') == '6-9' ? 'selected' : '' }}>6-9</option>
+                            <option value="10-13" {{ request('age_category') == '10-13' ? 'selected' : '' }}>10-13</option>
+                            <option value="14-17" {{ request('age_category') == '14-17' ? 'selected' : '' }}>14-17</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <select name="age" class="form-control text-center">
+                            <option value="" hidden>Yaş</option>
+                            @for ($i = 6; $i <= 17; $i++)
+                                <option value="{{ $i }}" {{ request('age') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                            @endfor
+                        </select>
+                    </div>
 
                 </div>
                 <div class="form-row mt-5">
@@ -118,10 +137,12 @@
                         <th class="text-center">Ad</th>
                         <th class="text-center">Soyad</th>
                         <th class="text-center">Ata adı</th>
-                        <th class="text-center">Doğum tarixi</th>
+                    {{--    <th class="text-center">Doğum tarixi</th>--}}
                         <th class="text-center">Cinsi</th>
                         <th class="text-center">Müraciət etdiyi nominasiya</th>
                         <th class="text-center">Müraciət etdiyi şəhər/rayon</th>
+                        <th class="text-center">Yaş kateqoriyası</th>
+                     {{--   <th class="text-center">Yaş</th>--}}
                         <th class="text-center">Ətraflı</th>
                     </tr>
                     </thead>
@@ -134,10 +155,12 @@
                             <td class="text-center">{{ $value->name }}</td>
                             <td class="text-center">{{ $value->surname }}</td>
                             <td class="text-center">{{ $value->patronymic }}</td>
-                            <td class="text-center">{{  \Carbon\Carbon::parse($value->birth_date )->format('d.m.Y')}}</td>
+              {{--              <td class="text-center">{{  \Carbon\Carbon::parse($value->birth_date )->format('d.m.Y')}}</td>--}}
                             <td class="text-center"><b>{{  $value->gender == 'MALE' ? 'Kişi' : 'Qadın' }}</b></td>
                             <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('nominations')->select('name')->where('id',$value->nomination_id)->first()->name }}</td>
                             <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('all_cities')->select('city_name')->where('id',$value->all_city_id)->first()->city_name }}</td>
+                            <td class="text-center">{{ $value->age_category }}</td>
+               {{--             <td class="text-center">{{ $value->age }}</td>--}}
                             <td>
                                 <a target="_blank" class="btn btn-sm btn-secondary"
                                    href="{{ route('backend.personal.user.detail',$value->id) }}">
