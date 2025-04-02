@@ -45,6 +45,8 @@ if ($date <= '2025-04-01 00:00:00') {
     Route::post('collective-registration-third-step', [CollectiveRegistrationController::class, 'thirdStep']);
     Route::post('collective-registration', [CollectiveRegistrationController::class, 'store']);
 });
+
+}
     // Select lists
     Route::get('education-schools-types', [EducationSchoolController::class, 'index']);
     Route::get('education-schools', [EducationSchoolController::class, 'getSchools']);
@@ -53,7 +55,7 @@ if ($date <= '2025-04-01 00:00:00') {
     Route::get('personal-nominations', [NominationController::class, 'personalNominations']);
     Route::get('collective-nominations', [NominationController::class, 'collectiveNominations']);
 
- }
+
     // Pdf dowload route
     Route::get('/download-pdf', function () {
         return response()->file(storage_path('app/public/downloads/1.pdf'));

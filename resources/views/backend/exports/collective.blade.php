@@ -12,8 +12,8 @@
         <th style="font-weight: bold;text-align: center">Müraciət etdiyi nominasiya</th>
         <th style="font-weight: bold;text-align: center">Müraciət etdiyi şəhər</th>
         <th style="font-weight: bold;text-align: center">Müraciət etdiyi rayon</th>
-        <th style="font-weight: bold;text-align: center"> I telefon nömrəsi</th>
-        <th style="font-weight: bold;text-align: center"> II telefon nömrəsi</th>
+        <th style="font-weight: bold;text-align: center"> Əlaqə nömrəsi 1</th>
+        <th style="font-weight: bold;text-align: center"> Əlaqə nömrəsi 2</th>
         <th style="font-weight: bold;text-align: center"> Email</th>
         <th style="font-weight: bold;text-align: center"> Təltiflər</th>
         <th style="font-weight: bold;text-align: center"> Yaş kategoriyası</th>

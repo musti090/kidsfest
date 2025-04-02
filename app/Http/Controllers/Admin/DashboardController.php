@@ -159,4 +159,12 @@ class DashboardController extends Controller
 
 
     }
+
+    public function nominationCityStatistics()
+    {
+        $regions = Cache::get('AllCity');
+        $personalNominations = Cache::get('personalNominations');
+        $collectiveNominations = Cache::get('collectiveNominations');
+        return view('backend.pages.statistics.nominationCityStatistics', compact('regions', 'personalNominations', 'collectiveNominations'));
+    }
 }

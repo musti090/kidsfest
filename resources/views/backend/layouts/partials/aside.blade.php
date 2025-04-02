@@ -64,7 +64,7 @@
                                class="umumi-yuklenir nav-link @if(request()->is('my-admin/district-statistics')) active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
-                                   Rayon üzrə say
+                                    Faktiki yaşadığı rayon
                                 </p>
                             </a>
                         </li>
@@ -73,7 +73,7 @@
                                class="umumi-yuklenir nav-link @if(request()->is('my-admin/city-statistics')) active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
-                                    Şəhər üzrə say
+                                    Müraciət etdiyi şəhər
                                 </p>
                             </a>
                         </li>
@@ -90,8 +90,17 @@
                             <a href="{{ route('backend.nomination.district.statistics') }}"
                                class="umumi-yuklenir nav-link @if(request()->is('my-admin/nomination-district-statistics')) active @endif">
                                 <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Rayon-nominasiya
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('backend.nomination.city.statistics') }}"
+                               class="umumi-yuklenir nav-link @if(request()->is('my-admin/nomination-city-statistics')) active @endif">
+                                <i class="far fa-circle nav-icon"></i>
                                 <p >
-                                    Rayon - nominasiya
+                                    Şəhər-nominasiya
                                 </p>
                             </a>
                         </li>

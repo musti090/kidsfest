@@ -112,7 +112,7 @@ class PersonalController extends Controller
         try {
             $data = $this->excelExportServices->getPersonalData($request);
             return Excel::download(new PersonalExport($data), 'Fərdi iştirakçılar.xlsx');
-
+           // return (new PersonalExport($data))->queue('users.xlsx');
         } catch (\Exception $e) {
 
             return $e->getMessage();

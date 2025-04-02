@@ -164,11 +164,11 @@
                             <td class="text-center">{{ $data->parent_patronymic }}</td>
                         </tr>
                             <tr class="setir">
-                            <th class="text-left">Birinci telefon nömrəsi</th>
+                            <th class="text-left">Əlaqə nömrəsi 1</th>
                             <td class="text-center">{{ "0".$data->first_prefix ." ".$data->first_phone_number }}</td>
                         </tr>
                             <tr class="setir">
-                            <th class="text-left">İkinci telefon nömrəsi</th>
+                            <th class="text-left">Əlaqə nömrəsi 2</th>
                             <td class="text-center">{{ "0".$data->second_prefix ." ".$data->second_phone_number }}</td>
                         </tr>
                             <tr class="setir">

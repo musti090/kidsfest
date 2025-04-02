@@ -22,8 +22,8 @@
         <th style="font-weight: bold;text-align: center">Valideynin adı</th>
         <th style="font-weight: bold;text-align: center">Valideynin soyadı</th>
         <th style="font-weight: bold;text-align: center">Valideynin ata adı</th>
-        <th style="font-weight: bold;text-align: center">I telefon nömrəsi</th>
-        <th style="font-weight: bold;text-align: center">II telefon nömrəsi</th>
+        <th style="font-weight: bold;text-align: center">Əlaqə nömrəsi 1</th>
+        <th style="font-weight: bold;text-align: center">Əlaqə nömrəsi 2</th>
         <th style="font-weight: bold;text-align: center">Email</th>
         <th style="font-weight: bold;text-align: center">Yaş kateqoriyası</th>
         <th style="font-weight: bold;text-align: center">Yaş</th>
@@ -45,7 +45,7 @@
             <td style="text-align: center">{{ \Illuminate\Support\Facades\DB::table('all_cities')->select('city_name')->where('id',$value->all_city_id)->first()->city_name }}</td>
             <td style="text-align: center">{{ $value->registration_address  }}</td>
             <td style="text-align: center">{{ $value->live_address  }}</td>
-            <td style="text-align: center">{{ \Illuminate\Support\Facades\DB::table('education_schools')->select('school_type')->where('id',$value->school_type_id)->first()->school_type }}</td>
+            <td style="text-align: center">{{ \Illuminate\Support\Facades\DB::table('education_schools')->select('school_type')->where('id',$value->school_type_id)->first()->school_type ?? null}}</td>
             <td style="text-align: center">
                 @if($value->created_at < '2025-03-15 01:28:00')
                     {{ \Illuminate\Support\Facades\DB::table('education_school_names')->select('name')->where('id',$value->school_id)->first()->name ?? null }}

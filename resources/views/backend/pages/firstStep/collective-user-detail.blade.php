@@ -106,11 +106,11 @@
                         </tr>
 
                         <tr class="setir">
-                            <th class="text-left">Birinci telefon nömrəsi</th>
+                            <th class="text-left">Əlaqə nömrəsi 1</th>
                             <td class="text-center">{{ "0".$director->first_prefix ." ".$director->first_phone_number }}</td>
                         </tr>
                         <tr class="setir">
-                            <th class="text-left">İkinci telefon nömrəsi</th>
+                            <th class="text-left">Əlaqə nömrəsi 2</th>
                             <td class="text-center">{{ "0".$director->second_prefix ." ".$director->second_phone_number }}</td>
                         </tr>
                         <tr class="setir">

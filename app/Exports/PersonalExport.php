@@ -3,15 +3,17 @@
 namespace App\Exports;
 
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\Exportable;
 
-class PersonalExport implements FromView,WithColumnWidths
+class PersonalExport implements FromView, WithColumnWidths, ShouldQueue
 {
+    use Exportable;
 
     protected $data;
-    protected $awards;
 
     public function __construct($data)
     {
@@ -24,6 +26,7 @@ class PersonalExport implements FromView,WithColumnWidths
      */
     public function view(): View
     {
+
         return view('backend.exports.personal', [
             'data' => $this->data
         ]);
