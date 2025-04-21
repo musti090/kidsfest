@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
- $date = date("Y-m-d H:i:s");
+$date = date("Y-m-d H:i:s");
 if ($date <= '2025-04-01 00:00:00') {
 
     Route::middleware('throttle:40,1')->group(function () {
@@ -64,10 +64,12 @@ if ($date <= '2025-04-01 00:00:00') {
         // Searches
         Route::get('check-personal', [SearchController::class, 'searchPersonalData']);
         Route::get('check-collective', [SearchController::class, 'searchCollectiveData']);
+        Route::get('time-place-personal', [SearchController::class, 'timePlacePersonal']);
+        Route::get('time-place-collective', [SearchController::class, 'timePlaceCollective']);
     });
 
-/*   Route::get('time-place', [SearchController::class, 'timePlace']);
-   Route::get('final-results', [FinalResultsController::class, 'index']);
+
+ /*    Route::get('final-results', [FinalResultsController::class, 'index']);
    Route::get('second-step-time-place', [SecondStepSearchController::class, 'timePlace']);
 */
 

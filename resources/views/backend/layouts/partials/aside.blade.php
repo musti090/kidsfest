@@ -59,6 +59,7 @@
                                 </p>
                             </a>
                         </li>
+                        @role('developer|superadmin|content manager')
                         <li class="nav-item">
                             <a href="{{ route('backend.dashboard.district.statistics') }}"
                                class="umumi-yuklenir nav-link @if(request()->is('my-admin/district-statistics')) active @endif">
@@ -104,9 +105,73 @@
                                 </p>
                             </a>
                         </li>
+                        @endrole
+                    </ul>
+                </li>
+                <li class="nav-item @if( request()->is('my-admin/personal-users-list') ||  request()->is('my-admin/collective-user-detail/*') || request()->is('my-admin/collective-users-list') || request()->is('my-admin/personal-user-detail/*'))  menu-open @endif">
+                    <a href="#"
+                       class="nav-link @if( request()->is('my-admin/personal-users-list') ||  request()->is('my-admin/collective-user-detail/*') || request()->is('my-admin/collective-users-list') || request()->is('my-admin/personal-user-detail/*'))  active @endif">
+                        <i class='nav-icon fas fa-dice-one'></i>
+                        <p>
+                            Birinci mərhələ
+                            <i class="right fa fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('backend.personal.users.list') }}"
+                               class="umumi-yuklenir nav-link @if(request()->is('my-admin/personal-users-list') || request()->is('my-admin/personal-user-detail/*')) active @endif">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Fərdi iştirakçılar
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('backend.collective.users.list') }}"
+                               class="umumi-yuklenir nav-link @if(request()->is('my-admin/collective-users-list') || request()->is('my-admin/collective-user-detail/*')) active @endif">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Kollektivlər
+                                </p>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
 
+                @role('admin')
+
+                <li class="nav-item">
+                    <a href="{{ route('backend.judges') }}"
+                       class="umumi-yuklenir nav-link @if(request()->is('my-admin/judges')) active @endif">
+                        <i class="nav-icon fas fa-layer-group"></i>
+                        <p>
+                            Münsifə aid iştirakçılar
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('backend.judges.files') }}"
+                       class="umumi-yuklenir nav-link @if(request()->is('my-admin/judges-files')) active @endif">
+                        <i class="nav-icon fas fa-file"></i>
+                        <p>
+                            Münsifin fayllarını yüklə
+                        </p>
+                    </a>
+                </li>
+
+                @endrole
+                <li class="nav-item">
+                    <a href="{{ route('backend.see.judges.files') }}"
+                       class="nav-link @if( request()->is('my-admin/see-judges-files') || request()->is('my-admin/see-judges-files/*')) active @endif">
+                        <i class="nav-icon far fa-file-image"></i>
+                        <p>
+                            Münsiflərin fayllarına bax
+                        </p>
+                    </a>
+                </li>
                 @can('view role')
                     <li class="nav-item">
                         <a href="{{ route('backend.roles.index') }}"

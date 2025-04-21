@@ -20,4 +20,9 @@ class CedvelController extends Controller
            ]);
        }
     }
+
+    public function vereq()
+    {
+        return view('backend.pages.firstStep.vereq');
+    }
 }

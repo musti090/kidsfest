@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class PrecinctsHasNomination extends Model
 {
     use HasFactory;
+
+    protected $table = 'precincts_has_nominations';
 }

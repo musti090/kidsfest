@@ -6,30 +6,57 @@ use App\Exports\CollectiveExport;
 use App\Exports\PersonalExport;
 use App\Http\Controllers\Controller;
 use App\Models\Collective;
+use App\Models\User;
 use App\Services\ExcelExportServices;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CollectiveController extends Controller
 {
+    /**
+     * @var user
+     */
+    private $user;
+
     private ExcelExportServices $excelExportServices;
 
     public function __construct(ExcelExportServices $excelExportServices)
     {
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            return $next($request);
+        });
         $this->excelExportServices = $excelExportServices;
     }
 
     public function index(Request $request)
     {
         try {
+            $cities_data = DB::table('all_cities')->pluck('city_name', 'id');
+            $regions_data = DB::table('m_n_regions')->pluck('name', 'id');
+            $nominations_data = DB::table('nominations')->pluck('name', 'id');
             $nominations = Cache::get('collectiveNominations');
             $cities = Cache::get('AllCity');
             $regions = Cache::get('MNRegion');
-
-            $data = DB::table('collective_directors')
-                ->leftJoin('collectives', 'collectives.id', '=', 'collective_directors.collective_id');
+            $user_precinct = null;
+            if ($this->user->getRoleNames()[0] == 'superadmin' || $this->user->getRoleNames()[0] == 'developer' || $this->user->getRoleNames()[0] == 'content manager') {
+                $data = DB::table('collective_directors')
+                    ->leftJoin('collectives', 'collectives.id', '=', 'collective_directors.collective_id')
+                    ->orderByDesc('score')
+                    ->orderBy('date')
+                    ->orderBy('time');
+            } else {
+                $user_precinct = $this->user->user_precinct->id;
+                $data = DB::table('collective_directors')
+                    ->leftJoin('collectives', 'collectives.id', '=', 'collective_directors.collective_id')
+                    ->where('collective_directors.precinct_id', $user_precinct)
+                    ->orderByDesc('score')
+                    ->orderBy('date')
+                    ->orderBy('time');
+            }
 
             if ($request->get("UIN")) {
                 $data->where("collective_directors.UIN", $request->get("UIN"));
@@ -70,19 +97,27 @@ class CollectiveController extends Controller
             $count = $data->count();
             $data = $data->paginate(25)->appends($request->query());
 
-            return view('backend.pages.firstStep.all-collective-users', compact('data', 'nominations', 'cities', 'regions', 'count'));
+            return view('backend.pages.firstStep.all-collective-users', compact('data', 'nominations', 'cities', 'regions', 'count','nominations_data','regions_data','cities_data','user_precinct'));
 
         } catch (\Exception $e) {
 
             return $e->getMessage();
         }
 
+
     }
 
     public function exportExcel(Request $request)
     {
         try {
-            $data = $this->excelExportServices->getCollectiveData($request);
+            if ($this->user->getRoleNames()[0] == 'superadmin' || $this->user->getRoleNames()[0] == 'developer' || $this->user->getRoleNames()[0] == 'content manager') {
+                $user_precinct = null;
+                $data = $this->excelExportServices->getCollectiveData($request, $user_precinct);
+            } else {
+                $user_precinct = $this->user->user_precinct->id;
+                $data = $this->excelExportServices->getCollectiveData($request, $user_precinct);
+            }
+
             return Excel::download(new CollectiveExport($data), 'Kollektiv.xlsx');
 
         } catch (\Exception $e) {
@@ -94,46 +129,62 @@ class CollectiveController extends Controller
     public function detail($id)
     {
 
-        /*
-
-                $collective = Collective::all();
-
-                foreach ($collective as $c) {
-                    echo "<b>".$c->id."</b><br>";
-
-                    $teenagers = DB::table('collective_teenagers')->where('collective_id',$c->id)->get();
-                    foreach ($teenagers as $t) {
-                        echo $t->id."<br>";
-                    }
-                   echo "<hr>";
-                }
-
-
-                exit;*/
-
-        try {
-            $collective = DB::table('collectives')
-                ->where('collectives.id', $id)
-                ->first();
-
-            $teenagers = DB::table('collective_teenagers')
-                ->where('collective_id', $id);
-
-            $teenagers = $teenagers->get();
-            $teenagers_count = $teenagers->count();
-
-            $director = DB::table('collective_directors')
-                ->where('collective_id', $id)
-                ->first();
+       /* try {*/
 
             $awards = DB::table('collective_awards')->where('collective_id', $id)->get();
 
-            return view('backend.pages.firstStep.collective-user-detail', compact('collective', 'teenagers', 'director', 'awards', 'teenagers_count'));
+            if ($this->user->getRoleNames()[0] == 'superadmin' || $this->user->getRoleNames()[0] == 'developer' || $this->user->getRoleNames()[0] == 'content manager') {
+                $collective = DB::table('collectives')
+                    ->where('collectives.id', $id)
+                    ->first();
 
-        } catch (\Exception $e) {
+                $teenagers = DB::table('collective_teenagers')
+                    ->where('collective_id', $id);
+
+                $teenagers = $teenagers->get();
+                $teenagers_count = $teenagers->count();
+
+                $director = DB::table('collective_directors')
+                    ->where('collective_id', $id)
+                    ->first();
+
+                return view('backend.pages.firstStep.collective-user-detail', compact('collective', 'teenagers', 'director', 'awards', 'teenagers_count'));
+
+            } else {
+                $user_precinct = $this->user->user_precinct->id;
+
+                $director = DB::table('collective_directors')
+                    ->where('collective_id', $id)
+                    ->where('collective_directors.precinct_id', $user_precinct)
+                    ->first();
+
+                if (empty($director)) {
+                    return redirect()->route('backend.collective.users.list');
+                }
+
+                $collective = DB::table('collectives')
+                    ->where('collectives.id', $id)
+                    ->first();
+
+                $teenagers = DB::table('collective_teenagers')
+                    ->where('collective_id', $id);
+
+                $teenagers = $teenagers->get();
+                $teenagers_count = $teenagers->count();
+
+                $judges = DB::table('judges')->where('nomination_id', $collective->collective_nomination_id)->where('precinct_id', $user_precinct)->get();
+                $criteria = DB::table('criterion_nominations')->where('nomination_id', $collective->collective_nomination_id)->get();
+
+                return view('backend.pages.firstStep.collective-user-detail', compact('collective', 'teenagers', 'director', 'awards', 'teenagers_count','judges','criteria'));
+
+            }
+
+
+
+ /*       } catch (\Exception $e) {
 
             return $e->getMessage();
-        }
+        }*/
 
     }
     /*   public function detail($id)

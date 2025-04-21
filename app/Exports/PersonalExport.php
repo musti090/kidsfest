@@ -14,11 +14,27 @@ class PersonalExport implements FromView, WithColumnWidths, ShouldQueue
     use Exportable;
 
     protected $data;
+    protected  $cities;
 
-    public function __construct($data)
+    protected  $regions;
+
+    protected  $nominations;
+    protected $education_schools;
+    protected $education_school_names;
+    protected $education_new_school_names;
+    protected $awards;
+
+
+    public function __construct($data,$cities,$regions,$nominations,$education_schools,$education_school_names,$education_new_school_names)
     {
         $this->data = $data;
-
+        $this->cities = $cities;
+        $this->regions = $regions;
+        $this->nominations = $nominations;
+        $this->education_schools = $education_schools;
+        $this->education_school_names = $education_school_names;
+        $this->education_new_school_names = $education_new_school_names;
+       // $this->awards = $awards;
     }
 
     /**
@@ -28,7 +44,14 @@ class PersonalExport implements FromView, WithColumnWidths, ShouldQueue
     {
 
         return view('backend.exports.personal', [
-            'data' => $this->data
+            'data' => $this->data,
+            'cities' => $this->cities,
+            'regions' => $this->regions,
+            'nominations' => $this->nominations,
+            'education_schools' => $this->education_schools,
+            'education_school_names' => $this->education_school_names,
+            'education_new_school_names' => $this->education_new_school_names
+          //  'awards' => $this->awards
         ]);
     }
 
@@ -37,19 +60,19 @@ class PersonalExport implements FromView, WithColumnWidths, ShouldQueue
         return [
             'A' => 10,
             'B' => 20,
-            'C' => 10,
-            'D' => 10,
-            'E' => 15,
+            'C' => 15,
+            'D' => 15,
+            'E' => 20,
             'F' => 20,
             'G' => 15,
             'H' => 10,
-            'I' => 50,
+            'I' => 80,
             'J' => 30,
-            'K' => 100,
+            'K' => 30,
             'L' => 100,
-            'M' => 30,
-            'N' => 80,
-            'O' => 20,
+            'M' => 80,
+            'N' => 50,
+            'O' => 15,
             'P' => 80,
             'Q' => 200,
             'R' => 20,

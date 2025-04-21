@@ -10,11 +10,12 @@
         <th style="font-weight: bold;text-align: center">Doğum tarixi</th>
         <th style="font-weight: bold;text-align: center">Cinsi</th>
         <th style="font-weight: bold;text-align: center">Müraciət etdiyi nominasiya</th>
+        <th style="font-weight: bold;text-align: center">Yaşadığı şəhər/rayon</th>
         <th style="font-weight: bold;text-align: center">Müraciət etdiyi şəhər/rayon</th>
         <th style="font-weight: bold;text-align: center">Qeydiyyat ünvanı</th>
-        <th style="font-weight: bold;text-align: center">Faktiki yaşayış ünvanı	</th>
-        <th style="font-weight: bold;text-align: center">Təhsil müəssisəsinin növü	</th>
-        <th style="font-weight: bold;text-align: center">Təhsil müəssisəsinin adı	</th>
+        <th style="font-weight: bold;text-align: center">Faktiki yaşayış ünvanı</th>
+        <th style="font-weight: bold;text-align: center">Təhsil müəssisəsinin növü</th>
+        <th style="font-weight: bold;text-align: center">Təhsil müəssisəsinin adı</th>
         <th style="font-weight: bold;text-align: center">Peşəkar/Həvəskar</th>
         <th style="font-weight: bold;text-align: center">Xüsusi incəsənət təhsili</th>
         <th style="font-weight: bold;text-align: center">Təltiflər</th>
@@ -41,21 +42,22 @@
             <td style="text-align: center">{{ $value->patronymic  }}</td>
             <td style="text-align: center">{{  \Carbon\Carbon::parse($value->birth_date )->format('d.m.Y')}}</td>
             <td style="text-align: center">{{  $value->gender == 'MALE' ? 'Kişi' : 'Qadın' }}</td>
-            <td style="text-align: center">{{ \Illuminate\Support\Facades\DB::table('nominations')->select('name')->where('id',$value->nomination_id)->first()->name }}</td>
-            <td style="text-align: center">{{ \Illuminate\Support\Facades\DB::table('all_cities')->select('city_name')->where('id',$value->all_city_id)->first()->city_name }}</td>
+            <td style="text-align: center">{{ $nominations[$value->nomination_id] ?? null }}</td>
+            <td style="text-align: center">{{ $regions[$value->mn_region_id] ?? null }}</td>
+            <td style="text-align: center">{{ $cities[$value->all_city_id] ?? null }}</td>
             <td style="text-align: center">{{ $value->registration_address  }}</td>
             <td style="text-align: center">{{ $value->live_address  }}</td>
-            <td style="text-align: center">{{ \Illuminate\Support\Facades\DB::table('education_schools')->select('school_type')->where('id',$value->school_type_id)->first()->school_type ?? null}}</td>
-            <td style="text-align: center">
+            <td style="text-align: center">{{ $education_schools[$value->school_type_id] ?? null}}</td>
+        {{--    <td style="text-align: center">
                 @if($value->created_at < '2025-03-15 01:28:00')
-                    {{ \Illuminate\Support\Facades\DB::table('education_school_names')->select('name')->where('id',$value->school_id)->first()->name ?? null }}
+                    {{ $education_school_names[$value->school_id] ?? null}}
                 @else
-                    {{ \Illuminate\Support\Facades\DB::table('education_school_new_names')->select('name')->where('id',$value->school_id)->first()->name ?? null }}
+                    {{ $education_new_school_names[$value->school_id] ?? null}}
                 @endif
-            </td>
+            </td>--}}
             <td style="text-align: center">
                 @if( $value->art_type == 1 && $value->art_education != null)
-                  Peşəkar
+                    Peşəkar
                 @elseif( $value->art_type == 2 && $value->art_education != null)
                     Peşəkar
                 @else
@@ -64,7 +66,8 @@
             </td>
             <td style="text-align: center">{{ $value->art_education ?? null }}</td>
             <td style="text-align: center">
-                @php
+               {{-- {{   $awards[$value->personal_user_id] ?? null }}--}}
+               @php
                     $awards = \Illuminate\Support\Facades\DB::table('personal_awards')->where('personal_user_id',$value->id)->select('awards_name')->get();
                 @endphp
                 @if( count($awards) > 0)

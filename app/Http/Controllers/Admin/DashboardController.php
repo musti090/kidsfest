@@ -43,11 +43,12 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        if ($this->user->getRoleNames()[0] == 'superadmin' || $this->user->getRoleNames()[0] == 'developer') {
+        if ($this->user->getRoleNames()[0] == 'superadmin' || $this->user->getRoleNames()[0] == 'developer' || $this->user->getRoleNames()[0] == 'content manager') {
             $get_personal_users = DB::table('personal_users')->select('id', 'gender');
             $personal_users = $get_personal_users->count();
             $get_personal_users = $get_personal_users->get();
-            $collectives = DB::table('collectives')->count();
+            $collectives = DB::table('collectives')
+                ->count();
             $get_collective_users = DB::table('collective_teenagers')->select('id', 'gender');
             $collective_users = $get_collective_users->count();
             $get_collective_users = $get_collective_users->get();
@@ -66,8 +67,43 @@ class DashboardController extends Controller
             }
             $personalFemales = $personal_users - $personalMales;
             $collectiveFemales = $collective_users - $collectiveMales;
+            $user_precinct = null;
+        } else {
+            $user_precinct = $this->user->user_precinct->id;
+            $get_personal_users = DB::table('personal_users')
+                ->leftJoin('personal_user_card_information', 'personal_user_card_information.personal_user_id', '=', 'personal_users.id')
+                ->where('personal_user_card_information.precinct_id', $user_precinct);
+
+            $personal_users = $get_personal_users->count();
+            $get_personal_users = $get_personal_users->get();
+            $collectives = DB::table('collective_directors')
+                ->leftJoin('collectives', 'collective_directors.collective_id', '=', 'collectives.id')
+                ->where('collective_directors.precinct_id', $user_precinct)
+                ->count();
+            $get_collective_users = DB::table('collective_directors')
+                ->leftJoin('collective_teenagers', 'collective_directors.collective_id', '=', 'collective_teenagers.collective_id')
+                ->where('collective_directors.precinct_id', $user_precinct);
+            $collective_users = $get_collective_users->count();
+            $get_collective_users = $get_collective_users->get();
+            $all = $personal_users + $collective_users;
+            $personalMales = 0;
+            $collectiveMales = 0;
+            foreach ($get_personal_users as $pu) {
+                if ($pu->gender == 'MALE') {
+                    $personalMales = $personalMales + 1;
+                }
+            }
+            foreach ($get_collective_users as $cu) {
+                if ($cu->gender == 'MALE') {
+                    $collectiveMales = $collectiveMales + 1;
+                }
+            }
+            $personalFemales = $personal_users - $personalMales;
+            $collectiveFemales = $collective_users - $collectiveMales;
+            $user_precinct = $this->user->user_precinct->id;
         }
-        return view('backend.pages.statistics.index', compact('personal_users', 'collectives', 'collective_users', 'all', 'personalMales', 'personalFemales', 'collectiveMales', 'collectiveFemales'));
+
+        return view('backend.pages.statistics.index', compact('personal_users', 'collectives', 'collective_users', 'all', 'personalMales', 'personalFemales', 'collectiveMales', 'collectiveFemales','user_precinct'));
     }
 
     public function cityStatistics()
@@ -102,6 +138,36 @@ class DashboardController extends Controller
 
     }
 
+    public function karabakhDistrictStatistics()
+    {
+        $district_count = [];
+        $districts = DB::table('m_n_regions')
+            ->select('id', 'name')
+            ->where('id', 26)
+            ->orWhere('id', 30)
+            ->orWhere('id', 84)
+            ->orWhere('id', 51)
+            ->orWhere('id', 77)
+            ->orWhere('id', 4)
+            ->orWhere('id', 43)
+            ->orWhere('id', 53)
+            ->orWhere('id', 86)
+            ->orWhere('id', 39)
+            ->orWhere('id', 40)
+            ->get();
+
+        foreach ($districts as $d):
+
+            $district_count[] = [
+                DB::table('personal_users')->where('mn_region_id', $d->id)->count(),
+                DB::table('collectives')->where('collective_mn_region_id', $d->id)->count(),
+                $d->name
+            ];
+        endforeach;
+        return view('backend.pages.statistics.karabakhDistrictStatistics', compact('district_count'));
+
+    }
+
     public function nominationStatistics()
     {
 
@@ -130,6 +196,53 @@ class DashboardController extends Controller
     {
         // $regions = DB::table('m_n_regions')->paginate(10);
         $regions = Cache::get('MNRegion');
+        $personalNominations = Cache::get('personalNominations');
+        $collectiveNominations = Cache::get('collectiveNominations');
+
+
+        /*  foreach ($regions as $key => $r) {
+              //  echo $r->name . "<br>";
+              $pernomCount = [];
+              $colnomCount = [];
+
+              foreach ($personalNominations as $nom) {
+                  $pernomCount[] = [
+                      PersonalUser::has('personal_card_information')->where('mn_region_id', $r->id)->where('nomination_id', $nom->id)->get()->count(),
+                      $nom->name
+                  ];
+              }
+              foreach ($collectiveNominations as $col_nom) {
+                  $colnomCount[] = [
+                      Collective::has('collective_director')->where('collective_nomination_id', $col_nom->id)->where('collective_mn_region_id', $r->id)->get()->count(),
+                      $col_nom->name
+                  ];
+              }*/
+        // echo $pernomCount[1][0]."<br>";
+        // echo "<hr>";
+
+
+        return view('backend.pages.statistics.nominationDistrictStatistics', compact('regions', 'personalNominations', 'collectiveNominations'));
+
+
+    }
+
+    public function nominationKarabakhDistrictStatistics()
+    {
+        // $regions = DB::table('m_n_regions')->paginate(10);
+        $regions = DB::table('m_n_regions')
+            ->select('id', 'name')
+            ->where('id', 26)
+            ->orWhere('id', 30)
+            ->orWhere('id', 84)
+            ->orWhere('id', 51)
+            ->orWhere('id', 77)
+            ->orWhere('id', 4)
+            ->orWhere('id', 43)
+            ->orWhere('id', 53)
+            ->orWhere('id', 86)
+            ->orWhere('id', 39)
+            ->orWhere('id', 40)
+            ->get();
         $personalNominations = Cache::get('personalNominations');
         $collectiveNominations = Cache::get('collectiveNominations');
 

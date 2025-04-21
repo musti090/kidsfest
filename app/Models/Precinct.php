@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Precinct extends Model
 {
     use HasFactory;
+
+    protected $table = 'precincts';
     public function sheher()
     {
-        return $this->belongsTo(City::class,'city_id');
+        return $this->belongsTo(AllCity::class,'city_id');
     }
 }

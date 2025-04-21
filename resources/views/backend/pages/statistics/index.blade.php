@@ -14,7 +14,12 @@
             </div>
         </div>
         <div id="invoice" class="container-fluid">
+            @role('developer|superadmin|content manager')
             <h2 class="text-center">İkinci Uşaq İncəsənət Festivalının qeydiyyat statistikası</h2>
+            @endrole
+            @role('admin')
+            <h2 class="text-center">{{ \Illuminate\Support\Facades\DB::table('precincts')->where('id',$user_precinct)->first()->place_name }} qeydiyyat statistikası</h2>
+            @endrole
             <div class="row text-center mt-5">
                 <div class="col-lg-3 col-6 mb-3">
                     <div class="small-box bg-info mf">

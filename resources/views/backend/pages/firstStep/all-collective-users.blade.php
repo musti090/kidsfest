@@ -17,6 +17,11 @@
                 </div>
             </div>
         </div>
+        @role('admin')
+        <div  class="container-fluid mt-5 p-2 bg-white">
+            <div class="col-sm-12 text-center"><h2>{{ \Illuminate\Support\Facades\DB::table('precincts')->where('id',$user_precinct)->first()->place_name }}</h2></div>
+        </div>
+        @endrole
         <div id="flip" class="container-fluid mt-5 p-2 bg-white">
             <div class="row text-center">
                 <div class="col-sm-12"><h4>Axtarış</h4></div>
@@ -127,6 +132,7 @@
                     <tr>
                         <th class="text-center">№</th>
                         <th class="text-center">Kollektivin kodu</th>
+                        <th class="text-center">Kollektivin adı</th>
                         <th class="text-center">Yarandığı il</th>
                         <th class="text-center">Kollektiv rəhbərinin FİN-i</th>
                         <th class="text-center">Kollektiv rəhbərinin adı</th>
@@ -134,7 +140,11 @@
                         <th class="text-center">Kollektiv rəhbərinin ata adı</th>
                         <th class="text-center">Müraciət etdiyi nominasiya</th>
                         <th class="text-center">Müraciət etdiyi şəhər/rayon</th>
+                        <th class="text-center">Faktiki fəaliyyət göstərdiyi şəhər</th>
                         <th class="text-center">Yaş kateqoriyası</th>
+                        <th class="text-center">Tarix</th>
+                        <th class="text-center">Saat</th>
+                        <th class="text-center">Nəticə</th>
                         <th class="text-center">Ətraflı</th>
                     </tr>
                     </thead>
@@ -143,6 +153,7 @@
                         <tr class="setir">
                             <td class="text-center sutun">{{ $key + $data->firstItem() }}</td>
                             <td class="text-center"><b>{{ $value->UIN }}</b></td>
+                            <td class="text-center">{{ $value->collective_name }}</td>
                             <td class="text-center">{{ $value->collective_created_date }}</td>
                             <td class="text-center">{{ $value->director_fin_code }}</td>
                             <td class="text-center">{{ $value->director_name }}</td>
@@ -150,7 +161,42 @@
                             <td class="text-center">{{ $value->director_patronymic }}</td>
                             <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('nominations')->select('name')->where('id',$value->collective_nomination_id)->first()->name }}</td>
                             <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('all_cities')->select('city_name')->where('id',$value->collective_city_id)->first()->city_name }}</td>
+                            <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('m_n_regions')->select('name')->where('id',$value->collective_mn_region_id)->first()->name }}</td>
                             <td class="text-center">{{ $value->age_category ?? null }}</td>
+                            <td class="text-center">{{ $value->date != null ? \Carbon\Carbon::parse($value->date)->format('d.m.Y')  : null }}</td>
+                            <td class="text-center">{{  $value->time != null ?  \Carbon\Carbon::parse($value->time)->format('H:i')  : null }}</td>
+                            @role('superadmin|developer|content manager')
+                            <td class="text-center">
+                                @if($value->is_absent == 0)
+                                    @if($value->score == null)
+                                        <span>  Qiymətləndirmə aparılmayıb</span>
+                                    @else
+                                        @if($value->score >= 30)
+                                            <b><span class="text-success">Keçib, </span><span
+                                                    style="font-size: 20px">{{ $value->score }}</span> </b>
+                                        @else
+                                            <b><span class="text-danger">Keçməyib, </span><span
+                                                    style="font-size: 20px">{{ $value->score }}</span> </b>
+                                        @endif
+                                    @endif
+                                @else
+                                    <b><span class="text-danger">Müsabiqəyə gəlmədi</span></b>
+                                @endif
+                            </td>
+                            @endrole
+                            @role('admin')
+                            <td class="text-center">
+                                @if($value->is_absent == 0)
+                                    @if($value->score == null)
+                                        <span>Qiymətləndirmə aparılmayıb</span>
+                                    @else
+                                        <b><span class="text-info">Qiymətləndirmə aparılıb</span></b>
+                                    @endif
+                                @else
+                                    <b><span class="text-danger">Müsabiqəyə gəlmədi</span></b>
+                                @endif
+                            </td>
+                            @endrole
                             <td>
                                 <a target="_blank" class="btn btn-sm btn-secondary"
                                    href="{{ route('backend.collective.user.detail',$value->id) }}">

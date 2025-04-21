@@ -12,13 +12,21 @@
                         <a href="{{ route('backend.personal.export.excel',request()->query()) }}"  class="btn btn-secondary">
                             Excel-ə çıxar
                         </a>
+                      {{--  <a href="{{ route('backend.personal.users.numbers.list',request()->query()) }}"  class="btn btn-secondary">
+                            Nömrə Excel-ə çıxar
+                        </a>--}}
                     </div>
                 </div>
             </div>
 
         </div>
+        @role('admin')
+        <div  class="container-fluid mt-5 p-2 bg-white">
+                <div class="col-sm-12 text-center"><h2>{{ \Illuminate\Support\Facades\DB::table('precincts')->where('id',$user_precinct)->first()->place_name }}</h2></div>
+        </div>
+        @endrole
         <div id="flip" class="container-fluid mt-5 p-2 bg-white">
-                <div class="col-sm-12 text-center"><h4>Axtarış</h4></div>
+            <div class="col-sm-12 text-center"><h4>Axtarış</h4></div>
         </div>
 
         <div id="panel" class="container-fluid pt-5 p-3 bg-white">
@@ -89,6 +97,7 @@
 
                 </div>
                 <div class="form-row mt-5">
+                    @role('developer|superadmin|content manager')
                     <div class="col">
                         <select name="all_city_id" class="form-control">
                             <option value="" hidden>Müraciət etdiyi şəhər/rayon</option>
@@ -113,6 +122,7 @@
 
                         </select>
                     </div>
+                    @endrole
                 </div>
                 <div class="row mt-5 text-right">
                     <div class="col-sm-12">
@@ -141,7 +151,11 @@
                         <th class="text-center">Cinsi</th>
                         <th class="text-center">Müraciət etdiyi nominasiya</th>
                         <th class="text-center">Müraciət etdiyi şəhər/rayon</th>
+                        <th class="text-center">Yaşadığı şəhər/rayon</th>
                         <th class="text-center">Yaş kateqoriyası</th>
+                        <th class="text-center">Tarix</th>
+                        <th class="text-center">Saat</th>
+                        <th class="text-center">Nəticə</th>
                      {{--   <th class="text-center">Yaş</th>--}}
                         <th class="text-center">Ətraflı</th>
                     </tr>
@@ -157,9 +171,45 @@
                             <td class="text-center">{{ $value->patronymic }}</td>
               {{--              <td class="text-center">{{  \Carbon\Carbon::parse($value->birth_date )->format('d.m.Y')}}</td>--}}
                             <td class="text-center"><b>{{  $value->gender == 'MALE' ? 'Kişi' : 'Qadın' }}</b></td>
-                            <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('nominations')->select('name')->where('id',$value->nomination_id)->first()->name }}</td>
-                            <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('all_cities')->select('city_name')->where('id',$value->all_city_id)->first()->city_name }}</td>
+                            <td class="text-center">{{ $nominations_data[$value->nomination_id] ?? null}}</td>
+                            <td class="text-center">{{ $cities_data[$value->all_city_id] ?? null }}</td>
+                            <td class="text-center">{{ $regions_data[$value->mn_region_id] ?? null }}</td>
                             <td class="text-center">{{ $value->age_category }}</td>
+                            <td class="text-center">{{ $value->date != null ? \Carbon\Carbon::parse($value->date)->format('d.m.Y')  : null }}</td>
+                            <td class="text-center">{{  $value->time != null ?  \Carbon\Carbon::parse($value->time)->format('H:i')  : null }}</td>
+
+                            @role('superadmin|developer|content manager')
+                            <td class="text-center">
+                                @if($value->is_absent == 0)
+                                    @if($value->score == null)
+                                        <span>  Qiymətləndirmə aparılmayıb</span>
+                                    @else
+                                        @if($value->score >= 30)
+                                            <b><span class="text-success">Keçib, </span><span
+                                                    style="font-size: 20px">{{ $value->score }}</span> </b>
+                                        @else
+                                            <b><span class="text-danger">Keçməyib, </span><span
+                                                    style="font-size: 20px">{{ $value->score }}</span> </b>
+                                        @endif
+                                    @endif
+                                @else
+                                    <b><span class="text-danger">Müsabiqəyə gəlmədi</span></b>
+                                @endif
+                            </td>
+                            @endrole
+                            @role('admin')
+                            <td class="text-center">
+                                @if($value->is_absent == 0)
+                                    @if($value->score == null)
+                                        <span>Qiymətləndirmə aparılmayıb</span>
+                                    @else
+                                        <b><span class="text-info">Qiymətləndirmə aparılıb</span></b>
+                                    @endif
+                                @else
+                                    <b><span class="text-danger">Müsabiqəyə gəlmədi</span></b>
+                                @endif
+                            </td>
+                            @endrole
                {{--             <td class="text-center">{{ $value->age }}</td>--}}
                             <td>
                                 <a target="_blank" class="btn btn-sm btn-secondary"

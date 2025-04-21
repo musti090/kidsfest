@@ -9,5 +9,6 @@ class JudgesList extends Model
 {
     use HasFactory;
 
+    protected $table = 'judges_list';
     protected $fillable = ['name'];
 }

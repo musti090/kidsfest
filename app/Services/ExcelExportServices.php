@@ -2,19 +2,22 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class ExcelExportServices
 {
-    public function getPersonalData($request)
+
+    public function getPersonalData($request, $user_precinct)
     {
-
-
         $data = DB::table('personal_users')
             ->leftJoin('personal_user_card_information', 'personal_user_card_information.personal_user_id', '=', 'personal_users.id')
             ->leftJoin('personal_user_parents', 'personal_user_parents.personal_user_id', '=', 'personal_users.id');
 
+        if ($user_precinct != null) {
+            $data->where('personal_user_card_information.precinct_id', $user_precinct);
+        }
         if ($request->get("name")) {
             $data->where("personal_users.name", $request->get("name"));
         }
@@ -52,16 +55,16 @@ class ExcelExportServices
             $data->where("personal_user_card_information.age", $request->get("age"));
         }
 
-       /* if ($request->get("test")) {
-            $data->where("personal_users.test", $request->get("test"));
-        }*/
+        /* if ($request->get("test")) {
+             $data->where("personal_users.test", $request->get("test"));
+         }*/
         /*    if ($request->get("school_type_id")) {
                 $data->where("personal_users.school_type_id", $request->get("school_type_id"));
             }
             if ($request->get("school_id")) {
                 $data->where("personal_users.school_id", $request->get("school_id"));
             }*/
-        if ($request->all() == []) {
+        if ($request->all() == [] && $user_precinct == null) {
             $data->take(0);
         }
 
@@ -69,10 +72,13 @@ class ExcelExportServices
     }
 
 
-    public function getCollectiveData($request)
+    public function getCollectiveData($request,$user_precinct)
     {
         $data = DB::table('collectives')
             ->leftJoin('collective_directors', 'collective_directors.collective_id', '=', 'collectives.id');
+        if ($user_precinct != null) {
+            $data->where('collective_directors.precinct_id', $user_precinct);
+        }
         if ($request->get("UIN")) {
             $data->where("collective_directors.UIN", $request->get("UIN"));
         }
@@ -106,12 +112,12 @@ class ExcelExportServices
         if ($request->get("age_category")) {
             $data->where("collectives.age_category", $request->get("age_category"));
         }
-      /*  if ($request->get("test")) {
-            $data->where("collectives.test", $request->get("test"));
-        }*/
-        if ($request->all() == []) {
+        /*  if ($request->get("test")) {
+              $data->where("collectives.test", $request->get("test"));
+          }*/
+  /*      if ($request->all() == []) {
             $data->take(0);
-        }
+        }*/
         return $data->get();
     }
 
