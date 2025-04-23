@@ -14,8 +14,8 @@
         <th style="font-weight: bold;text-align: center">Müraciət etdiyi şəhər/rayon</th>
         <th style="font-weight: bold;text-align: center">Qeydiyyat ünvanı</th>
         <th style="font-weight: bold;text-align: center">Faktiki yaşayış ünvanı</th>
-        <th style="font-weight: bold;text-align: center">Təhsil müəssisəsinin növü</th>
-        <th style="font-weight: bold;text-align: center">Təhsil müəssisəsinin adı</th>
+{{--        <th style="font-weight: bold;text-align: center">Təhsil müəssisəsinin növü</th>
+        <th style="font-weight: bold;text-align: center">Təhsil müəssisəsinin adı</th>--}}
         <th style="font-weight: bold;text-align: center">Peşəkar/Həvəskar</th>
         <th style="font-weight: bold;text-align: center">Xüsusi incəsənət təhsili</th>
         <th style="font-weight: bold;text-align: center">Təltiflər</th>
@@ -47,14 +47,14 @@
             <td style="text-align: center">{{ $cities[$value->all_city_id] ?? null }}</td>
             <td style="text-align: center">{{ $value->registration_address  }}</td>
             <td style="text-align: center">{{ $value->live_address  }}</td>
-            <td style="text-align: center">{{ $education_schools[$value->school_type_id] ?? null}}</td>
-        {{--    <td style="text-align: center">
-                @if($value->created_at < '2025-03-15 01:28:00')
-                    {{ $education_school_names[$value->school_id] ?? null}}
-                @else
-                    {{ $education_new_school_names[$value->school_id] ?? null}}
-                @endif
-            </td>--}}
+            {{--    <td style="text-align: center">{{ $education_schools[$value->school_type_id] ?? null}}</td>
+          <td style="text-align: center">
+                   @if($value->created_at < '2025-03-15 01:28:00')
+                       {{ $education_school_names[$value->school_id] ?? null}}
+                   @else
+                       {{ $education_new_school_names[$value->school_id] ?? null}}
+                   @endif
+               </td>--}}
             <td style="text-align: center">
                 @if( $value->art_type == 1 && $value->art_education != null)
                     Peşəkar

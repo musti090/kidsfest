@@ -9,7 +9,8 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="text-right">
-                        <a href="{{ route('backend.personal.export.excel',request()->query()) }}"  class="btn btn-secondary">
+                        <a href="{{ route('backend.personal.export.excel',request()->query()) }}"
+                           class="btn btn-secondary">
                             Excel-ə çıxar
                         </a>
                     </div>
@@ -98,7 +99,8 @@
                 <div class="row mt-5 text-right">
                     <div class="col-sm-12">
                         <button type="submit" class="btn btn-secondary">Axtar</button>
-                        <a href="{{ route('backend.judges.evaluate.first.step') }}" class="btn btn-secondary">Sıfırla</a>
+                        <a href="{{ route('backend.judges.evaluate.first.step') }}"
+                           class="btn btn-secondary">Sıfırla</a>
                     </div>
                 </div>
             </form>
@@ -132,9 +134,15 @@
                             <td class="text-center sutun">{{ $key + $data->firstItem() }}</td>
                             <td class="text-center">   {{ $precincts[$value->precinct_id] ?? '-' }}</td>
                             <td class="text-center">{{ $nominations[$value->nomination_id] ?? '-' }}</td>
-                            <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('personal_user_card_information')->where('personal_user_id',$value->personal_id)->first()->UIN ?? null }}</td>
-                            <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('personal_users')->where('id',$value->personal_id)->first()->name ?? null }}</td>
-                            <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('personal_users')->where('id',$value->personal_id)->first()->surname  ?? null}}</td>
+                            @if($value->type == 1)
+                                <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('personal_user_card_information')->where('personal_user_id',$value->personal_id)->first()->UIN ?? null }}</td>
+                                <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('personal_users')->where('id',$value->personal_id)->first()->name ?? null }}</td>
+                                <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('personal_users')->where('id',$value->personal_id)->first()->surname  ?? null}}</td>
+                            @else
+                                <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('collective_directors')->where('collective_id',$value->collective_id)->first()->UIN ?? null }}</td>
+                                <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('collectives')->where('id',$value->collective_id)->first()->name ?? null }}</td>
+                                <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('collectives')->where('id',$value->collective_id)->first()->surname  ?? null}}</td>
+                            @endif
                             <td class="text-center">{{ $criteria[$value->criterion_id] ?? '-' }}</td>
                             <td class="text-center">{{ $judges[$value->judge_id] ?? '-' }}</td>
                             <td class="text-center"><b>{{ $value->score }}</b></td>
@@ -188,8 +196,8 @@
         button.addEventListener('click', generatePDF);
     </script>
     <script>
-        $(document).ready(function(){
-            $("#flip").click(function(){
+        $(document).ready(function () {
+            $("#flip").click(function () {
                 $("#panel").slideToggle();
             });
         });

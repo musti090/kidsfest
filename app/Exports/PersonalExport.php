@@ -72,18 +72,18 @@ class PersonalExport implements FromView, WithColumnWidths, ShouldQueue
             'L' => 100,
             'M' => 80,
             'N' => 50,
-            'O' => 15,
+            'O' => 150,
             'P' => 80,
-            'Q' => 200,
+            'Q' => 50,
             'R' => 20,
             'S' => 20,
             'T' => 20,
             'U' => 20,
             'V' => 20,
-            'W' => 20,
+            'W' => 50,
             'X' => 50,
             'Y' => 15,
-            'Z' => 10,
+            'Z' => 50,
             'AA' => 20
         ];
     }

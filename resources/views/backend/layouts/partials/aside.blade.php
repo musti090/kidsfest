@@ -172,6 +172,35 @@
                         </p>
                     </a>
                 </li>
+                @role('developer|content manager')
+                <li class="nav-item">
+                    <a href="{{ route('backend.judges-list.index') }}"
+                       class="umumi-yuklenir nav-link @if( request()->is('my-admin/judges-list') || request()->is('my-admin/judges-list/*')) active @endif">
+                        <i class="nav-icon fas fa-file"></i>
+                        <p>
+                            Münsiflər
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('backend.precincts-has-judges.index') }}"
+                       class="umumi-yuklenir nav-link @if( request()->is('my-admin/precincts-has-judges') || request()->is('my-admin/precincts-has-judges/*')) active @endif">
+                        <i class="nav-icon fas fa-file"></i>
+                        <p>
+                            Münsif-Məntəqə
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('backend.precincts-has-nominations.index') }}"
+                       class="umumi-yuklenir nav-link @if( request()->is('my-admin/precincts-has-nominations') || request()->is('my-admin/precincts-has-nominations/*')) active @endif">
+                        <i class="nav-icon fas fa-file"></i>
+                        <p>
+                            Məntəqə-Vaxt
+                        </p>
+                    </a>
+                </li>
+                @endrole
                 @can('view role')
                     <li class="nav-item">
                         <a href="{{ route('backend.roles.index') }}"

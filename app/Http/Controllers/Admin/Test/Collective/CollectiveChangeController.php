@@ -38,7 +38,12 @@ class CollectiveChangeController extends Controller
 
             $data = DB::table('collective_directors')
                 ->leftJoin('collectives', 'collectives.id', '=', 'collective_directors.collective_id')
-                ->orderBy('date')->orderBy('time');
+                ->orderBy('date')
+                ->where('precinct_id' , 51)
+/*                ->orWhere('precinct_id' , 52)
+                ->orWhere('precinct_id' , 53)
+                ->orWhere('precinct_id' , 54)*/
+                ->orderBy('time');
             if ($request->get("UIN")) {
                 $data->where("collective_directors.UIN", $request->get("UIN"));
             }
@@ -76,7 +81,7 @@ class CollectiveChangeController extends Controller
                         $data->where("collectives.test", $request->get("test"));
                     }*/
             $count = $data->count();
-            $data = $data->paginate(7)->appends($request->query());
+            $data = $data->paginate(50)->appends($request->query());
 
             return view('backend.pages.test.all-collective-users', compact('data', 'nominations', 'cities', 'regions', 'count'));
 

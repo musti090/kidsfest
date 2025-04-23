@@ -264,14 +264,17 @@
                 @php
                     if($nomination->id < 20){
                      $art_type = $d->personal_user_form_information->art_type;
+                     $art_education = $d->personal_user_form_information->art_education;
                    }
                 @endphp
                 @if($nomination->id < 20)
                     <td>
-                        @if($art_type == 2)
-                            H
-                        @else
+                        @if($art_type == 1)
                             P
+                      @elseif($art_type == 2 && $art_education != null)
+                            P
+                        @else
+                            H
                         @endif
                     </td>
                 @endif

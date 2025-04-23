@@ -40,11 +40,17 @@ class PersonalChangeController extends Controller
             $nominations = Cache::get('personalNominations');
             $cities = Cache::get('AllCity');
             $regions = Cache::get('MNRegion');
+            $user_precinct = null;
+            $precinct_data = null;
 
                 $data = DB::table('personal_users')
                     ->leftJoin('personal_user_card_information', 'personal_user_card_information.personal_user_id', '=', 'personal_users.id')
                     ->leftJoin('personal_user_parents', 'personal_user_parents.personal_user_id', '=', 'personal_users.id')
-                    ->where('date','2025-06-16')
+                   // ->where('date','2025-06-16')
+                    ->where('precinct_id' , 51)
+                  //  ->orWhere('precinct_id' , 52)
+                  //  ->orWhere('precinct_id' , 53)
+                 //   ->orWhere('precinct_id' , 54)
                     ->orderBy('precinct_id')
                     ->orderBy('date')
                     ->orderBy('time');
@@ -96,7 +102,7 @@ class PersonalChangeController extends Controller
             }
             $count = $data->count();
            // return $data->take(3)->get();
-            $data = $data->paginate(100)->appends($request->query());
+            $data = $data->paginate(700)->appends($request->query());
 
             return view('backend.pages.test.all-personal-users', compact('data', 'count', 'nominations', 'cities', 'regions','nominations_data','regions_data','cities_data'));
 

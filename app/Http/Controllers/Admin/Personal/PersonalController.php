@@ -42,13 +42,17 @@ class PersonalController extends Controller
             $cities = Cache::get('AllCity');
             $regions = Cache::get('MNRegion');
             $user_precinct = null;
+            $precinct_data = null;
             if ($this->user->getRoleNames()[0] == 'superadmin' || $this->user->getRoleNames()[0] == 'developer' || $this->user->getRoleNames()[0] == 'content manager') {
+                $precinct_data = DB::table('precincts')->pluck('place_name', 'id');
                 $data = DB::table('personal_users')
                     ->leftJoin('personal_user_card_information', 'personal_user_card_information.personal_user_id', '=', 'personal_users.id')
                     ->leftJoin('personal_user_parents', 'personal_user_parents.personal_user_id', '=', 'personal_users.id')
                     ->orderByDesc('score')
+                    ->orderByDesc('is_absent')
                     ->orderBy('date')
-                    ->orderBy('time');
+                    ->orderBy('time')
+                    ->orderByDesc('precinct_id');
             } else {
                 $user_precinct = $this->user->user_precinct->id;
                 $data = DB::table('personal_users')
@@ -59,7 +63,9 @@ class PersonalController extends Controller
                     ->orderBy('date')
                     ->orderBy('time');
             }
-
+            if ($request->get("precinct_id")) {
+                $data->where("personal_user_card_information.precinct_id", $request->get("precinct_id"));
+            }
             if ($request->get("name")) {
                 $data->where("personal_users.name", $request->get("name"));
             }
@@ -99,15 +105,13 @@ class PersonalController extends Controller
             if ($request->get("age")) {
                 $data->where("personal_user_card_information.age", $request->get("age"));
             }
-       /*     if ($request->get("test")) {
-                // $data->where("personal_users.test", $request->get("test"));
-                $data->where('personal_users.registration_address', 'like', '%' . $request->get("test") . '%');
+            if ($request->get("art_type")) {
+                $data->where("personal_users.art_type", $request->get("art_type"))->where("personal_users.art_education", '!=', null,);
+            }
 
-            }*/
             $count = $data->count();
             $data = $data->paginate(25)->appends($request->query());
-
-            return view('backend.pages.firstStep.all-personal-users', compact('data', 'count', 'nominations', 'cities', 'regions', 'nominations_data', 'regions_data', 'cities_data','user_precinct'));
+            return view('backend.pages.firstStep.all-personal-users', compact('data', 'count', 'nominations', 'cities', 'regions', 'nominations_data', 'regions_data', 'cities_data', 'user_precinct', 'precinct_data'));
 
         } catch (\Exception $e) {
 

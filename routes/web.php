@@ -95,6 +95,7 @@ Route::name('backend.')->prefix('my-admin')->group(function () {
         Route::get('nomination-district-statistics', [DashboardController::class, 'nominationDistrictStatistics'])->name('nomination.district.statistics');
         Route::get('karabakh-nomination-district-statistics', [DashboardController::class, 'nominationKarabakhDistrictStatistics'])->name('nomination.karabakh.district.statistics');
         Route::get('nomination-city-statistics', [DashboardController::class, 'nominationCityStatistics'])->name('nomination.city.statistics');
+        Route::get('first-step-statistics', [DashboardController::class, 'firstStep'])->name('first.step.statistics');
 
         // Users routes
         Route::get('personal-users-list', [PersonalController::class, 'index'])->name('personal.users.list');

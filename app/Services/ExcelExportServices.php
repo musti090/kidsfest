@@ -55,6 +55,10 @@ class ExcelExportServices
             $data->where("personal_user_card_information.age", $request->get("age"));
         }
 
+        if ($request->get("art_type")) {
+            $data->where("personal_users.art_type", $request->get("art_type"))->where("personal_users.art_education", '!=', null,);
+        }
+
         /* if ($request->get("test")) {
              $data->where("personal_users.test", $request->get("test"));
          }*/

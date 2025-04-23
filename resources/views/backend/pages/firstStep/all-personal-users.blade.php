@@ -122,6 +122,20 @@
 
                         </select>
                     </div>
+                    <div class="col">
+
+
+
+
+                        <select name="precinct_id" class="form-control">
+                            <option value="" hidden>Məkan</option>
+
+
+                           @foreach( $precinct_data as $key => $pd)
+                                <option value="{{ $key }}" >{{ $pd}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     @endrole
                 </div>
                 <div class="row mt-5 text-right">
@@ -142,6 +156,9 @@
                     <thead>
                     <tr>
                         <th class="text-center">№</th>
+                        @role('developer|superadmin|content manager')
+                        <th class="text-center">Məkan</th>
+                        @endrole
                         <th class="text-center">Kod</th>
                         <th class="text-center">FİN</th>
                         <th class="text-center">Ad</th>
@@ -164,6 +181,9 @@
                     @foreach($data as $key => $value)
                         <tr class="setir">
                             <td class="text-center sutun">{{ $key + $data->firstItem() }}</td>
+                            @role('developer|superadmin|content manager')
+                            <td class="text-center">{{ $precinct_data[$value->precinct_id] ?? null }}</td>
+                            @endrole
                             <td class="text-center"><b>{{ $value->UIN }}</b></td>
                             <td class="text-center">{{ $value->fin_code }}</td>
                             <td class="text-center">{{ $value->name }}</td>

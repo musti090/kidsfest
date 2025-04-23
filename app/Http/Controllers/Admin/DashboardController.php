@@ -103,7 +103,85 @@ class DashboardController extends Controller
             $user_precinct = $this->user->user_precinct->id;
         }
 
-        return view('backend.pages.statistics.index', compact('personal_users', 'collectives', 'collective_users', 'all', 'personalMales', 'personalFemales', 'collectiveMales', 'collectiveFemales','user_precinct'));
+        return view('backend.pages.statistics.index', compact('personal_users', 'collectives', 'collective_users', 'all', 'personalMales', 'personalFemales', 'collectiveMales', 'collectiveFemales', 'user_precinct'));
+    }
+
+    public function firstStep(Request $request)
+    {
+        $district_count = [];
+        $districts = Cache::get('MNRegion');
+        $date = $request->date;
+
+        foreach ($districts as $d)  {
+            $pu = DB::table('personal_users')
+                ->leftJoin('personal_user_card_information', 'personal_user_card_information.personal_user_id', '=', 'personal_users.id')
+                ->where('mn_region_id', $d->id)
+                ->where('date', $date)
+                ->count();
+            $p_gelmeyen = DB::table('personal_users')
+                ->leftJoin('personal_user_card_information', 'personal_user_card_information.personal_user_id', '=', 'personal_users.id')
+                ->where('mn_region_id', $d->id)
+                ->where('is_absent',1)
+                ->where('date', $date)
+                ->count();
+            $p_istirak_edenler = DB::table('personal_users')
+                ->leftJoin('personal_user_card_information', 'personal_user_card_information.personal_user_id', '=', 'personal_users.id')
+                ->where('mn_region_id', $d->id)
+                ->where('score','!=',null)
+                ->where('date', $date)
+                ->count();
+            $p_sisteme_daxil_edilmeyib = DB::table('personal_users')
+                ->leftJoin('personal_user_card_information', 'personal_user_card_information.personal_user_id', '=', 'personal_users.id')
+                ->where('mn_region_id', $d->id)
+                ->where('is_absent',0)
+                ->where('score','=',null)
+                ->where('date', $date)
+                ->count();
+
+            $cu = DB::table('collective_directors')
+                ->leftJoin('collectives', 'collectives.id', '=', 'collective_directors.collective_id')
+                ->where('date', $date)
+                ->where('collective_mn_region_id', $d->id)
+                ->count();
+            $c_gelmeyen = DB::table('collective_directors')
+                ->leftJoin('collectives', 'collectives.id', '=', 'collective_directors.collective_id')
+                ->where('date', $date)
+                ->where('is_absent',1)
+                ->where('collective_mn_region_id', $d->id)
+                ->count();
+            $c_istirak_edenler = DB::table('collective_directors')
+                ->leftJoin('collectives', 'collectives.id', '=', 'collective_directors.collective_id')
+                ->where('date', $date)
+                ->where('score','!=',null)
+                ->where('collective_mn_region_id', $d->id)
+                ->count();
+
+            $c_sisteme_daxil_edilmeyib = DB::table('personal_users')
+                ->leftJoin('personal_user_card_information', 'personal_user_card_information.personal_user_id', '=', 'personal_users.id')
+                ->where('mn_region_id', $d->id)
+                ->where('is_absent',0)
+                ->where('score','=',null)
+                ->where('date', $date)
+                ->count();
+
+
+                $district_count[] = [
+                    $pu,
+                    $p_istirak_edenler,
+                    $p_gelmeyen,
+                    $p_sisteme_daxil_edilmeyib,
+                    $cu,
+                    $c_istirak_edenler,
+                    $c_gelmeyen,
+                    $c_sisteme_daxil_edilmeyib,
+                    $d->name
+                ];
+
+
+        }
+     //   return $district_count;
+        return view('backend.pages.statistics.firstStep', compact('date','district_count'));
+
     }
 
     public function cityStatistics()
