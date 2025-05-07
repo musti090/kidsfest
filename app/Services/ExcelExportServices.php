@@ -18,6 +18,9 @@ class ExcelExportServices
         if ($user_precinct != null) {
             $data->where('personal_user_card_information.precinct_id', $user_precinct);
         }
+        if ($request->get("precinct_id")) {
+            $data->where("personal_user_card_information.precinct_id", $request->get("precinct_id"));
+        }
         if ($request->get("name")) {
             $data->where("personal_users.name", $request->get("name"));
         }
@@ -59,9 +62,9 @@ class ExcelExportServices
             $data->where("personal_users.art_type", $request->get("art_type"))->where("personal_users.art_education", '!=', null,);
         }
 
-        /* if ($request->get("test")) {
-             $data->where("personal_users.test", $request->get("test"));
-         }*/
+         if ($request->get("date")) {
+             $data->where("personal_user_card_information.date", null);
+         }
         /*    if ($request->get("school_type_id")) {
                 $data->where("personal_users.school_type_id", $request->get("school_type_id"));
             }
@@ -116,9 +119,9 @@ class ExcelExportServices
         if ($request->get("age_category")) {
             $data->where("collectives.age_category", $request->get("age_category"));
         }
-        /*  if ($request->get("test")) {
-              $data->where("collectives.test", $request->get("test"));
-          }*/
+        if ($request->get("date")) {
+            $data->where("collective_directors.date", null);
+        }
   /*      if ($request->all() == []) {
             $data->take(0);
         }*/

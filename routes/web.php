@@ -99,6 +99,7 @@ Route::name('backend.')->prefix('my-admin')->group(function () {
 
         // Users routes
         Route::get('personal-users-list', [PersonalController::class, 'index'])->name('personal.users.list');
+        Route::get('personal-users-list-test', [PersonalController::class, 'indexTest'])->name('personal.users.list.test');
         Route::get('personal-users-numbers-list', [PersonalController::class, 'numbersExport'])->name('personal.users.numbers.list');
         Route::get('personal-user-detail/{id}', [PersonalController::class, 'detail'])->name('personal.user.detail');
         Route::get('collective-users-list', [CollectiveController::class, 'index'])->name('collective.users.list');
@@ -133,6 +134,7 @@ Route::name('backend.')->prefix('my-admin')->group(function () {
         Route::get('first-step-user-precincts', [TestController::class, 'fsUserPrecincts']);*/
         // First step test
         // Route::get('first-step-test', [FirstStepTestController::class, 'index']);
+        Route::get('first-test-table', [FirstStepTestController::class, 'testTable']);
       /*  Route::get('contact-city-region-personal', [FirstStepTestPersonalController::class, 'ContactCityRegion']);
         Route::get('contact-city-region-collective', [FirstStepTestCollectiveController::class, 'ContactCityRegion']);
         Route::get('contact-precinct-has-nominations', [FirstStepTestController::class, 'PrecinctHasNominations']);*/
@@ -141,7 +143,5 @@ Route::name('backend.')->prefix('my-admin')->group(function () {
         Route::get('menteqe-istirakci-collective', [FirstStepTestCollectiveController::class, 'menteqeIstirakci']);
         Route::get('menteqe-vaxt-personal', [FirstStepTestPersonalController::class, 'menteqeVaxt']);
         Route::get('menteqe-vaxt-collective', [FirstStepTestCollectiveController::class, 'menteqeVaxt']);*/
-
-
     });
 });

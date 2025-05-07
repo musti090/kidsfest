@@ -8,21 +8,21 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
-          {{--          <div class="text-right">
-                        <a href="{{ route('backend.personal.export.excel',request()->query()) }}"  class="btn btn-secondary">
-                            Excel-ə çıxar
-                        </a>
-                        <a href="{{ route('backend.personal.users.numbers.list',request()->query()) }}"  class="btn btn-secondary">
-                            Nömrə Excel-ə çıxar
-                        </a>
-                    </div>--}}
+                    {{--          <div class="text-right">
+                                  <a href="{{ route('backend.personal.export.excel',request()->query()) }}"  class="btn btn-secondary">
+                                      Excel-ə çıxar
+                                  </a>
+                                  <a href="{{ route('backend.personal.users.numbers.list',request()->query()) }}"  class="btn btn-secondary">
+                                      Nömrə Excel-ə çıxar
+                                  </a>
+                              </div>--}}
                 </div>
             </div>
 
         </div>
-    {{--    <div id="flip" class="container-fluid mt-5 p-2 bg-white">
-                <div class="col-sm-12 text-center"><h4>Axtarış</h4></div>
-        </div>--}}
+        {{--    <div id="flip" class="container-fluid mt-5 p-2 bg-white">
+                    <div class="col-sm-12 text-center"><h4>Axtarış</h4></div>
+            </div>--}}
 
         <div id="panel" class="container-fluid pt-5 p-3 bg-white">
             <form action="{{ route('backend.personal.users.list') }}">
@@ -74,11 +74,13 @@
                         </select>
                     </div>
                     <div class="col">
-                        <select  name="age_category" class="form-control text-center">
+                        <select name="age_category" class="form-control text-center">
                             <option value="" hidden>Yaş kateqoriyası</option>
                             <option value="6-9" {{ request('age_category') == '6-9' ? 'selected' : '' }}>6-9</option>
-                            <option value="10-13" {{ request('age_category') == '10-13' ? 'selected' : '' }}>10-13</option>
-                            <option value="14-17" {{ request('age_category') == '14-17' ? 'selected' : '' }}>14-17</option>
+                            <option value="10-13" {{ request('age_category') == '10-13' ? 'selected' : '' }}>10-13
+                            </option>
+                            <option value="14-17" {{ request('age_category') == '14-17' ? 'selected' : '' }}>14-17
+                            </option>
                         </select>
                     </div>
                     <div class="col">
@@ -137,14 +139,17 @@
                     <thead>
                     <tr>
                         <th class="text-center">№</th>
-                      <th class="text-center">Kod</th>
+                        <th class="text-center">Kod</th>
                         <th class="text-center">FİN</th>
                         <th class="text-center">Məkan</th>
                         <th class="text-center">Müraciət etdiyi nominasiya</th>
-                   {{--     <th class="text-center">Müraciət etdiyi şəhər/rayon</th>--}}
+                        {{--     <th class="text-center">Müraciət etdiyi şəhər/rayon</th>--}}
                         <th class="text-center">Yaşadığı şəhər/rayon</th>
                         <th class="text-center">Tarix</th>
                         <th class="text-center">Saat</th>
+                        @role('developer|content manager')
+                        <th class="text-center">Dəyişilmə vaxtı</th>
+                        @endrole
                         <th class="text-center">Ətraflı</th>
                     </tr>
                     </thead>
@@ -152,17 +157,21 @@
                     @foreach($data as $key => $value)
                         <tr class="setir">
                             <td class="text-center sutun">{{ $key + $data->firstItem() }}</td>
-                      <td class="text-center"><b>{{ $value->UIN }}</b></td>
+                            <td class="text-center"><b>{{ $value->UIN }}</b></td>
                             <td class="text-center">{{ $value->fin_code }}</td>
                             <td class="text-center">{{ \Illuminate\Support\Facades\DB::table('precincts')->where('id',$value->precinct_id)->first()->place_name ?? null}}</td>
                             <td class="text-center">{{ $nominations_data[$value->nomination_id] ?? null}}</td>
-{{--
-                            <td class="text-center">{{ $cities_data[$value->all_city_id] ?? null }}</td>
---}}
+                            {{--
+                                                        <td class="text-center">{{ $cities_data[$value->all_city_id] ?? null }}</td>
+                            --}}
                             <td class="text-center">{{ $regions_data[$value->mn_region_id] ?? null }}</td>
                             <td class="text-center">{{ $value->date != null ? \Carbon\Carbon::parse($value->date)->format('d.m.Y')  : null }}</td>
                             <td class="text-center">{{  $value->time != null ?  \Carbon\Carbon::parse($value->time)->format('H:i')  : null }}</td>
+                                       @role('developer|content manager')
 
+                                            <td class="text-center">{{    \Carbon\Carbon::parse($value->updated_at)->format('d.m.Y H:i:s')  ?? null }}</td>
+
+                                            @endrole
                             <td>
                                 <a target="_blank" class="btn btn-sm btn-secondary"
                                    href="{{ route('backend.personal-changes.edit',$value->id) }}">
@@ -215,8 +224,8 @@
         button.addEventListener('click', generatePDF);
     </script>
     <script>
-        $(document).ready(function(){
-            $("#flip").click(function(){
+        $(document).ready(function () {
+            $("#flip").click(function () {
                 $("#panel").slideToggle();
             });
         });

@@ -1,5 +1,5 @@
 @extends('backend.layouts.app')
-@section('title','Fərdi iştirakçılar')
+@section('title','Fərdi iştirakçılar Test')
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('backend.personal.users.list') }}">Bütün iştirakçılar</a></li>
 @endsection
@@ -30,7 +30,7 @@
         </div>
 
         <div id="panel" class="container-fluid pt-5 p-3 bg-white">
-            <form action="{{ route('backend.personal.users.list') }}">
+            <form action="{{ route('backend.personal.users.list.test') }}">
                 <div class="form-row">
                     <div class="col">
                         <input type="text" class="form-control" value="{{ old('UIN', request('UIN')) }}"
@@ -41,7 +41,7 @@
                                placeholder="FİN" name="fin_code">
                     </div>
                     <div class="col">
-                        <select name="nomination_id" class="form-control">
+                        <select name="nomination_id" class="form-control select2bs4">
                             <option value="" hidden>Nominasiya</option>
                             @foreach($nominations as $nomination)
                                 <option
@@ -67,9 +67,42 @@
                 </div>
                 <div class="form-row mt-5">
                     <div class="col">
-                        <input type="date" class="form-control" value="{{ old('birth_date', request('birth_date')) }}"
-                               placeholder="Doğum tarixi" name="birth_date">
+                        <input type="text" class="form-control" value="{{ old('registration_address', request('registration_address')) }}"
+                               placeholder="Qeydiyyat ünvanı" name="registration_address">
                     </div>
+                    <div class="col">
+                        <input type="text" class="form-control" value="{{ old('live_address', request('live_address')) }}"
+                               placeholder="Yaşayış ünvanı" name="live_address">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" value="{{ old('patronymic', request('patronymic')) }}"
+                               placeholder="Ata adı" name="patronymic">
+                    </div>
+                </div>
+                <div class="form-row mt-5">
+                    <div class="col text-center">
+                      Doğum tarixi
+                    </div>
+                    <div class="col mr-5">
+                        <input type="date" class="form-control" value="{{ old('birth_date', request('birth_date')) }}"
+                                name="birth_date">
+                    </div>
+                    <div class="col text-center">
+                        Tarix
+                    </div>
+                    <div class="col mr-5">
+                        <input type="date" class="form-control" value="{{ old('date', request('date')) }}"
+                              name="date">
+                    </div>
+                    <div class="col text-center">
+                        Saat
+                    </div>
+                    <div class="col mr-5">
+                        <input type="time" class="form-control" value="{{ old('time', request('time')) }}"
+                                name="time">
+                    </div>
+                </div>
+                <div class="form-row mt-5">
 
                     <div class="col">
                         <select name="gender" class="form-control">
@@ -87,7 +120,7 @@
                         </select>
                     </div>
                     <div class="col">
-                        <select name="age" class="form-control text-center">
+                        <select name="age" class="form-control text-center select2bs4">
                             <option value="" hidden>Yaş</option>
                             @for ($i = 6; $i <= 17; $i++)
                                 <option value="{{ $i }}" {{ request('age') == $i ? 'selected' : '' }}>{{ $i }}</option>
@@ -99,7 +132,7 @@
                 <div class="form-row mt-5">
                     @role('developer|superadmin|content manager')
                     <div class="col">
-                        <select name="all_city_id" class="form-control">
+                        <select name="all_city_id" class="form-control select2bs4">
                             <option value="" hidden>Müraciət etdiyi şəhər/rayon</option>
                             @foreach($cities as $city)
 
@@ -111,7 +144,7 @@
                         </select>
                     </div>
                     <div class="col">
-                        <select name="mn_region_id" class="form-control">
+                        <select name="mn_region_id" class="form-control select2bs4">
                             <option value="" hidden>Yaşadığı şəhər/rayon</option>
                             @foreach($regions as $region)
 
@@ -127,7 +160,7 @@
 
 
 
-                        <select name="precinct_id" class="form-control">
+                        <select name="precinct_id" class="form-control select2bs4">
                             <option value="" hidden>Məkan</option>
 
 
@@ -297,8 +330,23 @@
             });
         });
     </script>
+
+    <!-- Select2 -->
+    <script src="{{ asset('backend/assets/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script>
+        $(function () {
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+        })
+    </script>
 @endpush
 @push('customCss')
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('backend/assets/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet"
+          href="{{ asset('backend/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/plugins/toastr/toastr.min.css') }}">
     <style>
         #panel {

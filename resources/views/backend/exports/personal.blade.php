@@ -28,6 +28,8 @@
         <th style="font-weight: bold;text-align: center">Email</th>
         <th style="font-weight: bold;text-align: center">Yaş kateqoriyası</th>
         <th style="font-weight: bold;text-align: center">Yaş</th>
+        <th style="font-weight: bold;text-align: center">Məkan</th>
+        <th style="font-weight: bold;text-align: center">Nəticə</th>
         <th style="font-weight: bold;text-align: center">Qeydiyyat tarixi</th>
     </tr>
     </thead>
@@ -85,6 +87,22 @@
             <td style="text-align: center">{{ $value->email }}</td>
             <td style="text-align: center">{{ $value->age_category  }}</td>
             <td style="text-align: center">{{ $value->age  }}</td>
+            <td style="text-align: center">{{ $precincts[$value->precinct_id] ?? null  }}</td>
+            <td style="text-align: center">
+                @if($value->is_absent == 0)
+                    @if($value->score == null)
+                        <span>  Qiymətləndirmə aparılmayıb</span>
+                    @else
+                        @if($value->score >= 30)
+                            <b><span>Keçib, </span><span>{{ $value->score }}</span> </b>
+                        @else
+                            <b><span>Keçməyib, </span><span>{{ $value->score }}</span> </b>
+                        @endif
+                    @endif
+                @else
+                    <b><span>Müsabiqəyə gəlmədi</span></b>
+                @endif
+            </td>
             <td style="text-align: center">{{  \Carbon\Carbon::parse($value->created_at )->format('d.m.Y H:i:s')}}</td>
         </tr>
     @endforeach

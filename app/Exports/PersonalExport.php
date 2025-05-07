@@ -22,12 +22,14 @@ class PersonalExport implements FromView, WithColumnWidths, ShouldQueue
     protected $education_schools;
     protected $education_school_names;
     protected $education_new_school_names;
+    protected $precincts;
     protected $awards;
 
 
-    public function __construct($data,$cities,$regions,$nominations,$education_schools,$education_school_names,$education_new_school_names)
+    public function __construct($data,$cities,$regions,$nominations,$education_schools,$education_school_names,$education_new_school_names,$precincts)
     {
         $this->data = $data;
+        $this->precincts = $precincts;
         $this->cities = $cities;
         $this->regions = $regions;
         $this->nominations = $nominations;
@@ -45,6 +47,7 @@ class PersonalExport implements FromView, WithColumnWidths, ShouldQueue
 
         return view('backend.exports.personal', [
             'data' => $this->data,
+            'precincts' => $this->precincts,
             'cities' => $this->cities,
             'regions' => $this->regions,
             'nominations' => $this->nominations,
@@ -84,7 +87,9 @@ class PersonalExport implements FromView, WithColumnWidths, ShouldQueue
             'X' => 50,
             'Y' => 15,
             'Z' => 50,
-            'AA' => 20
+            'AA' => 80,
+            'AB' => 30,
+            'AC' => 20
         ];
     }
 

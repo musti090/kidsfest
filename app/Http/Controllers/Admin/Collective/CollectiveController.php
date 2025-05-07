@@ -45,6 +45,7 @@ class CollectiveController extends Controller
             if ($this->user->getRoleNames()[0] == 'superadmin' || $this->user->getRoleNames()[0] == 'developer' || $this->user->getRoleNames()[0] == 'content manager') {
                 $data = DB::table('collective_directors')
                     ->leftJoin('collectives', 'collectives.id', '=', 'collective_directors.collective_id')
+                 //   ->where('collective_directors.date', null)
                     ->orderByDesc('score')
                     ->orderBy('date')
                     ->orderBy('time');
@@ -91,6 +92,9 @@ class CollectiveController extends Controller
             if ($request->get("age_category")) {
                 $data->where("collectives.age_category", $request->get("age_category"));
             }
+       /*     if ($request->get("date") == null) {
+                $data->where("collective_directors.date", null);
+            }*/
             /*        if ($request->get("test")) {
                         $data->where("collectives.test", $request->get("test"));
                     }*/

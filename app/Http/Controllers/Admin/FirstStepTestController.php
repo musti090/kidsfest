@@ -53,6 +53,31 @@ class FirstStepTestController extends Controller
     }
 
 
+    public function testTable()
+    {
+
+         $tableNames = DB::table('tableName')->get();
+
+
+        foreach ($tableNames as $tableName) {
+            $personal_user = DB::table('personal_users')
+                ->leftJoin('personal_user_card_information', 'personal_user_card_information.personal_user_id', '=', 'personal_users.id')
+                ->where('personal_user_card_information.fin_code', '=', $tableName->FIN)
+                ->first();
+
+           if ($personal_user) {
+                DB::table('personal_users')
+                    ->where('id', $personal_user->id)
+                    ->update([
+                        'art_education' => $tableName->IM,
+                        'art_type' => 1
+                    ]);
+            }
+
+        }
+
+    }
+
     public function menteqeUser()
     {
         /*
@@ -75,51 +100,47 @@ class FirstStepTestController extends Controller
         */
 
 
-/*
-         $precincts = Precinct::orderBy('id','asc')->get();
-                        foreach ($precincts as $k => $p){
-                            $parol = Str::random(6).'@'.Str::random(6);
-                           // echo $p->place_name."<br>";
-                            $user = new User();
-                            $user->city_id = $p->city_id;
-                            $user->precinct_id = $p->id;
-                            $user->name = $p->place_name;
-                            $user->username  = "User".($k + 1);
-                            $user->email  = "user".($k + 1)."@gmail.com";
-                            $user->password = Hash::make($parol);
-                            $user->is_admin = 1;
-                            $user->save();
+        /*
+                 $precincts = Precinct::orderBy('id','asc')->get();
+                                foreach ($precincts as $k => $p){
+                                    $parol = Str::random(6).'@'.Str::random(6);
+                                   // echo $p->place_name."<br>";
+                                    $user = new User();
+                                    $user->city_id = $p->city_id;
+                                    $user->precinct_id = $p->id;
+                                    $user->name = $p->place_name;
+                                    $user->username  = "User".($k + 1);
+                                    $user->email  = "user".($k + 1)."@gmail.com";
+                                    $user->password = Hash::make($parol);
+                                    $user->is_admin = 1;
+                                    $user->save();
 
-                            $nu = new UserForTest();
-                            $nu->city_id = $p->city_id;
-                            $nu->precinct_id = $p->id;
-                            $nu->name = $p->place_name;
-                            $nu->username  = "User".($k + 1);
-                            $nu->email  = "user".($k + 1)."@gmail.com";
-                            $nu->parol = $parol;
-                            $nu->save();
+                                    $nu = new UserForTest();
+                                    $nu->city_id = $p->city_id;
+                                    $nu->precinct_id = $p->id;
+                                    $nu->name = $p->place_name;
+                                    $nu->username  = "User".($k + 1);
+                                    $nu->email  = "user".($k + 1)."@gmail.com";
+                                    $nu->parol = $parol;
+                                    $nu->save();
 
-                        }
+                                }
 
-                      $users = User::all();
-                      foreach($users as $k => $u){
-                          if($u->id > 3){
-                            //  echo $u->id."<br>";
-                              DB::table('model_has_roles')->updateOrInsert([
-                                  'role_id' => 3,
-                                  'model_type' => 'App\Models\User',
-                                  'model_id' => $u->id
-                              ]);
-                          }
-                      }
-*/
+                              $users = User::all();
+                              foreach($users as $k => $u){
+                                  if($u->id > 3){
+                                    //  echo $u->id."<br>";
+                                      DB::table('model_has_roles')->updateOrInsert([
+                                          'role_id' => 3,
+                                          'model_type' => 'App\Models\User',
+                                          'model_id' => $u->id
+                                      ]);
+                                  }
+                              }
+        */
         $data = UserForTest::all();
         return view('backend.pages.menteqeUser.index', compact('data'));
     }
-
-
-
-
 
 
 }

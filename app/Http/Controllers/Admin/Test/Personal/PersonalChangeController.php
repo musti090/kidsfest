@@ -22,7 +22,6 @@ class PersonalChangeController extends Controller
     private $user;
 
 
-
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
@@ -43,17 +42,18 @@ class PersonalChangeController extends Controller
             $user_precinct = null;
             $precinct_data = null;
 
-                $data = DB::table('personal_users')
-                    ->leftJoin('personal_user_card_information', 'personal_user_card_information.personal_user_id', '=', 'personal_users.id')
-                    ->leftJoin('personal_user_parents', 'personal_user_parents.personal_user_id', '=', 'personal_users.id')
-                   // ->where('date','2025-06-16')
-                    ->where('precinct_id' , 51)
-                  //  ->orWhere('precinct_id' , 52)
-                  //  ->orWhere('precinct_id' , 53)
-                 //   ->orWhere('precinct_id' , 54)
-                    ->orderBy('precinct_id')
-                    ->orderBy('date')
-                    ->orderBy('time');
+            $data = DB::table('personal_users')
+                ->leftJoin('personal_user_card_information', 'personal_user_card_information.personal_user_id', '=', 'personal_users.id')
+                ->leftJoin('personal_user_parents', 'personal_user_parents.personal_user_id', '=', 'personal_users.id')
+                ->where('personal_user_card_information.date', '=', null)
+              //  ->where('personal_user_card_information.updated_at', '<', '2025-04-24 00:00:00')
+               // ->where('precinct_id', 51)
+                //  ->orWhere('precinct_id' , 52)
+                //  ->orWhere('precinct_id' , 53)
+                //   ->orWhere('precinct_id' , 54)
+                ->orderBy('personal_user_card_information.precinct_id')
+                ->orderBy('date')
+                ->orderBy('time');
 
 
             if ($request->get("name")) {
@@ -101,10 +101,10 @@ class PersonalChangeController extends Controller
 
             }
             $count = $data->count();
-           // return $data->take(3)->get();
+            // return $data->take(3)->get();
             $data = $data->paginate(700)->appends($request->query());
 
-            return view('backend.pages.test.all-personal-users', compact('data', 'count', 'nominations', 'cities', 'regions','nominations_data','regions_data','cities_data'));
+            return view('backend.pages.test.all-personal-users', compact('data', 'count', 'nominations', 'cities', 'regions', 'nominations_data', 'regions_data', 'cities_data'));
 
         } catch (\Exception $e) {
 
@@ -119,18 +119,18 @@ class PersonalChangeController extends Controller
         if (is_null($this->user) || !$this->user->can('delete users')) {
             abort(403, 'İcazəniz yoxdur !!!');
         }
-        $precincts =  Precinct::orderBy('id')->get();
+        $precincts = Precinct::orderBy('id')->get();
         $nominations = Nomination::all();
-        $data = PersonalUserCardInformation::where('personal_user_id',$id)->first();
-        return view('backend.pages.test.personal-edit',compact('precincts','nominations','data'));
+        $data = PersonalUserCardInformation::where('personal_user_id', $id)->first();
+        return view('backend.pages.test.personal-edit', compact('precincts', 'nominations', 'data'));
 
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -141,10 +141,10 @@ class PersonalChangeController extends Controller
         }
 
 
-        $data = PersonalUserCardInformation::where('id',$id)->first();
-    /*    if($data->date!= null || $data->time!= null || $data->precinct_id != null) {
-            return redirect()->back();
-        }*/
+        $data = PersonalUserCardInformation::where('id', $id)->first();
+        /*    if($data->date!= null || $data->time!= null || $data->precinct_id != null) {
+                return redirect()->back();
+            }*/
         $data->precinct_id = $request->precinct_id;
         $data->date = $request->date;
         $data->time = $request->time;

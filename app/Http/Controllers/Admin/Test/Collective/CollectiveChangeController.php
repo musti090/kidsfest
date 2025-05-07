@@ -38,8 +38,9 @@ class CollectiveChangeController extends Controller
 
             $data = DB::table('collective_directors')
                 ->leftJoin('collectives', 'collectives.id', '=', 'collective_directors.collective_id')
+                ->where('collective_directors.date', '=', null)
                 ->orderBy('date')
-                ->where('precinct_id' , 51)
+            //    ->where('precinct_id' , 51)
 /*                ->orWhere('precinct_id' , 52)
                 ->orWhere('precinct_id' , 53)
                 ->orWhere('precinct_id' , 54)*/

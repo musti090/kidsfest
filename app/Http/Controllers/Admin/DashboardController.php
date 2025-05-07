@@ -156,9 +156,9 @@ class DashboardController extends Controller
                 ->where('collective_mn_region_id', $d->id)
                 ->count();
 
-            $c_sisteme_daxil_edilmeyib = DB::table('personal_users')
-                ->leftJoin('personal_user_card_information', 'personal_user_card_information.personal_user_id', '=', 'personal_users.id')
-                ->where('mn_region_id', $d->id)
+            $c_sisteme_daxil_edilmeyib = DB::table('collective_directors')
+                ->leftJoin('collectives', 'collectives.id', '=', 'collective_directors.collective_id')
+                ->where('collective_mn_region_id', $d->id)
                 ->where('is_absent',0)
                 ->where('score','=',null)
                 ->where('date', $date)

@@ -17,6 +17,7 @@
         <th style="font-weight: bold;text-align: center"> Email</th>
         <th style="font-weight: bold;text-align: center"> Təltiflər</th>
         <th style="font-weight: bold;text-align: center"> Yaş kategoriyası</th>
+        <th style="font-weight: bold;text-align: center">Nəticə</th>
         <th style="font-weight: bold;text-align: center"> Qeydiyyat tarixi</th>
 
     </tr>
@@ -49,6 +50,21 @@
                 @endif
             </td>
             <td style="text-align: center">{{ $value->age_category ?? null }}</td>
+            <td style="text-align: center">
+                @if($value->is_absent == 0)
+                    @if($value->score == null)
+                        <span>  Qiymətləndirmə aparılmayıb</span>
+                    @else
+                        @if($value->score >= 30)
+                            <b><span>Keçib, </span><span>{{ $value->score }}</span> </b>
+                        @else
+                            <b><span>Keçməyib, </span><span>{{ $value->score }}</span> </b>
+                        @endif
+                    @endif
+                @else
+                    <b><span>Müsabiqəyə gəlmədi</span></b>
+                @endif
+            </td>
             <td style="text-align: center">{{  \Carbon\Carbon::parse($value->created_at )->format('d.m.Y H:i:s')}}</td>
         </tr>
     @endforeach
